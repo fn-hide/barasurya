@@ -1,0 +1,19 @@
+meta {
+  name: test-email
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{HOST}}/api/v1/utils/test-email/?email_to=febriantohuda@gmail.com
+  body: none
+  auth: none
+}
+
+params:query {
+  email_to: febriantohuda@gmail.com
+}
+
+headers {
+  Authorization: Bearer {{TOKEN}}
+}

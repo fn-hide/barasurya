@@ -1,0 +1,21 @@
+meta {
+  name: users-me (update)
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{HOST}}/api/v1/users/me
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{TOKEN}}
+}
+
+body:json {
+  {
+    "full_name": "admin example"
+  }
+}

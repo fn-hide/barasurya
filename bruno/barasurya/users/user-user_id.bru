@@ -1,0 +1,19 @@
+meta {
+  name: user-user_id
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{HOST}}/api/v1/users/:user_id
+  body: none
+  auth: none
+}
+
+params:path {
+  user_id: 0ec8bb70-edb8-4ffa-880e-831895458704
+}
+
+headers {
+  Authorization: Bearer {{TOKEN}}
+}
