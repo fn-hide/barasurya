@@ -1,8 +1,9 @@
 import uuid
 from typing import Any
 
+from datetime import datetime, timezone
 from fastapi import APIRouter, HTTPException
-from sqlmodel import func, select
+from sqlmodel import func, select, and_
 
 from app.api.deps import CurrentUser, SessionDep
 from app.models import Item, ItemCreate, ItemPublic, ItemsPublic, ItemUpdate, Message
@@ -107,3 +108,119 @@ def delete_item(
     session.delete(item)
     session.commit()
     return Message(message="Item deleted successfully")
+
+
+@router.put("/{id}/stock", response_model=ItemPublic)
+def update_stock_item(
+    *,
+    session: SessionDep,
+    current_user: CurrentUser,
+    id: uuid.UUID,
+    quantity: int,
+) -> Any:
+    """
+    Update an item stock.
+    """
+    item = session.get(Item, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    if not current_user.is_superuser and (item.owner_id != current_user.id):
+        raise HTTPException(status_code=400, detail="Not enough permissions")
+    item.stock += quantity
+    item.date_updated = datetime.now(timezone.utc)
+    session.add(item)
+    session.commit()
+    session.refresh(item)
+    return item
+
+
+@router.get("/low_stock/", response_model=ItemsPublic)
+def read_low_stock_items(
+    session: SessionDep, current_user: CurrentUser, skip: int = 0, limit: int = 100
+) -> Any:
+    """
+    Retrieve low stock items.
+    """
+
+    if current_user.is_superuser:
+        count_statement = (
+            select(func.count())
+            .select_from(Item)
+            .where(Item.stock <= Item.stock_minimum)
+        )
+        count = session.exec(count_statement).one()
+        statement = (
+            select(Item)
+            .where(Item.stock <= Item.stock_minimum)
+            .offset(skip)
+            .limit(limit)
+        )
+        items = session.exec(statement).all()
+    else:
+        count_statement = (
+            select(func.count())
+            .select_from(Item)
+            .where(and_(
+                Item.owner_id == current_user.id,
+                Item.stock <= Item.stock_minimum,
+            ))
+        )
+        count = session.exec(count_statement).one()
+        statement = (
+            select(Item)
+            .where(and_(
+                Item.owner_id == current_user.id,
+                Item.stock <= Item.stock_minimum,
+            ))
+            .offset(skip)
+            .limit(limit)
+        )
+        items = session.exec(statement).all()
+
+    return ItemsPublic(data=items, count=count)
+
+
+@router.put("/{id}/activate", response_model=ItemPublic)
+def activate_item(
+    *,
+    session: SessionDep,
+    current_user: CurrentUser,
+    id: uuid.UUID,
+) -> Any:
+    """
+    Update an item stock.
+    """
+    item = session.get(Item, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    if not current_user.is_superuser and (item.owner_id != current_user.id):
+        raise HTTPException(status_code=400, detail="Not enough permissions")
+    item.is_active = True
+    item.date_updated = datetime.now(timezone.utc)
+    session.add(item)
+    session.commit()
+    session.refresh(item)
+    return item
+
+
+@router.put("/{id}/deactivate", response_model=ItemPublic)
+def deactivate_item(
+    *,
+    session: SessionDep,
+    current_user: CurrentUser,
+    id: uuid.UUID,
+) -> Any:
+    """
+    Update an item stock.
+    """
+    item = session.get(Item, id)
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    if not current_user.is_superuser and (item.owner_id != current_user.id):
+        raise HTTPException(status_code=400, detail="Not enough permissions")
+    item.is_active = False
+    item.date_updated = datetime.now(timezone.utc)
+    session.add(item)
+    session.commit()
+    session.refresh(item)
+    return item

@@ -1,7 +1,12 @@
 import uuid
+from datetime import datetime, timezone
 
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
+
+
+def utcnow() -> datetime:
+    return datetime.now(timezone.utc)
 
 
 # Shared properties
@@ -60,6 +65,16 @@ class UsersPublic(SQLModel):
 class ItemBase(SQLModel):
     title: str = Field(min_length=1, max_length=255)
     description: str | None = Field(default=None, max_length=255)
+    unit: str | None = Field(default=None, max_length=20)
+    price_purchase: float | None = None
+    price_sell: float | None = None
+    stock: int = Field(default=0, ge=0)  # ge=0 prevent stock to be negative
+    stock_minimum: int = Field(default=0, ge=0)
+    is_active: bool = Field(default=True)
+    category: str | None = Field(default=None, max_length=50)
+    location: str | None = Field(default=None, max_length=50)
+    date_created: datetime = Field(default_factory=utcnow)
+    date_updated: datetime = Field(default_factory=utcnow)
 
 
 # Properties to receive on item creation
@@ -70,6 +85,9 @@ class ItemCreate(ItemBase):
 # Properties to receive on item update
 class ItemUpdate(ItemBase):
     title: str | None = Field(default=None, min_length=1, max_length=255)  # type: ignore
+    # stock: int | None = None
+    # minimum_stock: int | None = None
+    # is_active: bool | None = None
 
 
 # Database model, database table inferred from class name
