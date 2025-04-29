@@ -79,7 +79,8 @@ services:
           action: rebuild
     # TODO: remove once coverage is done locally
     volumes:
-      - ./backend/htmlcov:/app/htmlcov
+      - ./backend:/app
+      # - ./backend/htmlcov:/app/htmlcov
     environment:
       SMTP_HOST: "mailcatcher"
       SMTP_PORT: "1025"
@@ -101,6 +102,18 @@ services:
       args:
         - VITE_API_URL=http://localhost:8000
         - NODE_ENV=development
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    develop:
+      watch:
+        - path: ./frontend
+          target: /app
+          action: sync
+          ignore:
+            - ./frontend/node_modules
+            - node_modules
+            - dist
+
 
   playwright:
     build:
