@@ -1,16 +1,39 @@
 import uuid
 from datetime import datetime, timezone
 
-from pydantic import EmailStr
+from pydantic import EmailStr, ConfigDict
 from sqlmodel import Field, Relationship, SQLModel
 
 
+# a helper function to generate a datetime in utc
 def utcnow() -> datetime:
     return datetime.now(timezone.utc)
 
 
+# setup constraint naming convention, so we add flexibility to modify constraint later
+# source: https://github.com/fastapi/sqlmodel/discussions/1213
+convention = {
+    "ix": "ix_%(column_0_label)s",
+    "uq": "uq_%(table_name)s_%(column_0_name)s",
+    "ck": "ck_%(table_name)s_%(constraint_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+    "pk": "pk_%(table_name)s",
+}
+
+
+class BaseModel(SQLModel):
+    """Base model for everything by add naming convention feature."""
+
+    model_config = ConfigDict(
+        protected_namespaces=(),
+    )  # type: ignore
+
+
+BaseModel.metadata.naming_convention = convention
+
+
 # Shared properties
-class UserBase(SQLModel):
+class UserBase(BaseModel):
     email: EmailStr = Field(unique=True, index=True, max_length=255)
     is_active: bool = True
     is_superuser: bool = False
@@ -22,7 +45,7 @@ class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=40)
 
 
-class UserRegister(SQLModel):
+class UserRegister(BaseModel):
     email: EmailStr = Field(max_length=255)
     password: str = Field(min_length=8, max_length=40)
     full_name: str | None = Field(default=None, max_length=255)
@@ -34,12 +57,12 @@ class UserUpdate(UserBase):
     password: str | None = Field(default=None, min_length=8, max_length=40)
 
 
-class UserUpdateMe(SQLModel):
+class UserUpdateMe(BaseModel):
     full_name: str | None = Field(default=None, max_length=255)
     email: EmailStr | None = Field(default=None, max_length=255)
 
 
-class UpdatePassword(SQLModel):
+class UpdatePassword(BaseModel):
     current_password: str = Field(min_length=8, max_length=40)
     new_password: str = Field(min_length=8, max_length=40)
 
@@ -48,7 +71,9 @@ class UpdatePassword(SQLModel):
 class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
+    
     items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
+    item_categories: list["ItemCategory"] = Relationship(back_populates="owner", cascade_delete=True)
 
 
 # Properties to return via API, id is always required
@@ -56,13 +81,49 @@ class UserPublic(UserBase):
     id: uuid.UUID
 
 
-class UsersPublic(SQLModel):
+class UsersPublic(BaseModel):
     data: list[UserPublic]
     count: int
 
 
+class ItemCategoryBase(BaseModel):
+    name: str = Field(min_length=1, max_length=100)
+    description: str | None = Field(default=None, max_length=255)
+
+
+class ItemCategoryCreate(ItemCategoryBase):
+    pass
+
+
+class ItemCategoryUpdate(ItemCategoryBase):
+    name: str | None = Field(default=None, min_length=1, max_length=100)
+
+
+class ItemCategory(ItemCategoryBase, table=True):
+    __tablename__ = "item_category"
+    
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)    
+    
+    owner_id: uuid.UUID = Field(
+        foreign_key="user.id", nullable=False, ondelete="CASCADE"
+    )
+    owner: User | None = Relationship(back_populates="item_categories")
+    
+    items: list["Item"] = Relationship(back_populates="item_category", cascade_delete=True)
+
+
+class ItemCategoryPublic(ItemCategoryBase):
+    id: uuid.UUID
+    owner_id: uuid.UUID
+
+
+class ItemCategoriesPublic(BaseModel):
+    data: list[ItemCategoryPublic]
+    count: int
+
+
 # Shared properties
-class ItemBase(SQLModel):
+class ItemBase(BaseModel):
     title: str = Field(min_length=1, max_length=255)
     description: str | None = Field(default=None, max_length=255)
     unit: str | None = Field(default=None, max_length=20)
@@ -71,7 +132,6 @@ class ItemBase(SQLModel):
     stock: int = Field(default=0, ge=0)  # ge=0 prevent stock to be negative
     stock_minimum: int = Field(default=0, ge=0)
     is_active: bool = Field(default=True)
-    category: str | None = Field(default=None, max_length=50)
     location: str | None = Field(default=None, max_length=50)
     date_created: datetime = Field(default_factory=utcnow)
     date_updated: datetime = Field(default_factory=utcnow)
@@ -94,10 +154,16 @@ class ItemUpdate(ItemBase):
 class Item(ItemBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     title: str = Field(max_length=255)
+    
     owner_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
     owner: User | None = Relationship(back_populates="items")
+    
+    item_category_id: uuid.UUID = Field(
+        foreign_key="item_category.id", nullable=False, ondelete="CASCADE"
+    )
+    item_category: ItemCategory | None = Relationship(back_populates="items")
 
 
 # Properties to return via API, id is always required
@@ -106,27 +172,27 @@ class ItemPublic(ItemBase):
     owner_id: uuid.UUID
 
 
-class ItemsPublic(SQLModel):
+class ItemsPublic(BaseModel):
     data: list[ItemPublic]
     count: int
 
 
 # Generic message
-class Message(SQLModel):
+class Message(BaseModel):
     message: str
 
 
 # JSON payload containing access token
-class Token(SQLModel):
+class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
 
 
 # Contents of JWT token
-class TokenPayload(SQLModel):
+class TokenPayload(BaseModel):
     sub: str | None = None
 
 
-class NewPassword(SQLModel):
+class NewPassword(BaseModel):
     token: str
     new_password: str = Field(min_length=8, max_length=40)
