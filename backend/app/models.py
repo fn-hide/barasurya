@@ -78,6 +78,7 @@ class User(UserBase, table=True):
     
     items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
     item_categories: list["ItemCategory"] = Relationship(back_populates="owner", cascade_delete=True)
+    item_units: list["ItemUnit"] = Relationship(back_populates="owner", cascade_delete=True)
 
 
 # Properties to return via API, id is always required
@@ -130,6 +131,46 @@ class ItemCategoriesPublic(BaseModel):
     count: int
 
 
+class ItemUnitBase(BaseModel):
+    name: str = Field(min_length=1, max_length=100)
+    description: str | None = Field(default=None, max_length=255)
+
+
+class ItemUnitCreate(ItemUnitBase):
+    pass
+
+
+class ItemUnitUpdate(ItemUnitBase):
+    name: str | None = Field(default=None, min_length=1, max_length=100)
+
+
+class ItemUnit(ItemUnitBase, table=True):
+    __tablename__ = "item_unit"
+    
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    date_created: datetime = Field(default_factory=utcnow)
+    date_updated: datetime = Field(default_factory=utcnow)
+    
+    owner_id: uuid.UUID = Field(
+        foreign_key="user.id", nullable=False, ondelete="CASCADE"
+    )
+    owner: User | None = Relationship(back_populates="item_units")
+    
+    items: list["Item"] = Relationship(back_populates="item_unit", cascade_delete=True)
+
+
+class ItemUnitPublic(ItemUnitBase):
+    id: uuid.UUID
+    owner_id: uuid.UUID
+    date_created: datetime
+    date_updated: datetime
+
+
+class ItemUnitsPublic(BaseModel):
+    data: list[ItemUnitPublic]
+    count: int
+
+
 # Shared properties
 class ItemBase(BaseModel):
     title: str = Field(min_length=1, max_length=255)
@@ -168,6 +209,11 @@ class Item(ItemBase, table=True):
         foreign_key="item_category.id", nullable=False, ondelete="CASCADE"
     )
     item_category: ItemCategory | None = Relationship(back_populates="items")
+    
+    item_unit_id: uuid.UUID = Field(
+        foreign_key="item_unit.id", nullable=False, ondelete="CASCADE"
+    )
+    item_unit: ItemCategory | None = Relationship(back_populates="items")
 
 
 # Properties to return via API, id is always required
