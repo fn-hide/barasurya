@@ -32,6 +32,10 @@ class BaseModel(SQLModel):
 BaseModel.metadata.naming_convention = convention
 
 
+class BaseModelUpdate(BaseModel):
+    date_updated: datetime = Field(default_factory=utcnow)
+
+
 # Shared properties
 class UserBase(BaseModel):
     email: EmailStr = Field(unique=True, index=True, max_length=255)
@@ -133,27 +137,23 @@ class ItemBase(BaseModel):
     stock_minimum: int = Field(default=0, ge=0)
     is_active: bool = Field(default=True)
     location: str | None = Field(default=None, max_length=50)
-    date_created: datetime = Field(default_factory=utcnow)
-    date_updated: datetime = Field(default_factory=utcnow)
 
 
 # Properties to receive on item creation
 class ItemCreate(ItemBase):
-    pass
+    item_category_id: uuid.UUID
 
 
 # Properties to receive on item update
 class ItemUpdate(ItemBase):
     title: str | None = Field(default=None, min_length=1, max_length=255)  # type: ignore
-    # stock: int | None = None
-    # minimum_stock: int | None = None
-    # is_active: bool | None = None
 
 
 # Database model, database table inferred from class name
 class Item(ItemBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    title: str = Field(max_length=255)
+    date_created: datetime = Field(default_factory=utcnow)
+    date_updated: datetime = Field(default_factory=utcnow)
     
     owner_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"

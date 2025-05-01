@@ -1,12 +1,11 @@
 import uuid
 from typing import Any
 
-from datetime import datetime, timezone
 from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select, and_
 
 from app.api.deps import CurrentUser, SessionDep
-from app.models import Item, ItemCreate, ItemPublic, ItemsPublic, ItemUpdate, Message
+from app.models import Item, ItemCreate, ItemPublic, ItemsPublic, ItemUpdate, BaseModelUpdate, Message, ItemCategory
 
 router = APIRouter(prefix="/items", tags=["items"])
 
@@ -62,6 +61,9 @@ def create_item(
     """
     Create new item.
     """
+    item_category = session.get(ItemCategory, item_in.item_category_id)
+    if not item_category:
+        raise HTTPException(status_code=404, detail="Item category not found")
     item = Item.model_validate(item_in, update={"owner_id": current_user.id})
     session.add(item)
     session.commit()
@@ -86,6 +88,7 @@ def update_item(
     if not current_user.is_superuser and (item.owner_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
     update_dict = item_in.model_dump(exclude_unset=True)
+    update_dict.update(BaseModelUpdate().model_dump())
     item.sqlmodel_update(update_dict)
     session.add(item)
     session.commit()
@@ -127,7 +130,7 @@ def update_stock_item(
     if not current_user.is_superuser and (item.owner_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
     item.stock += quantity
-    item.date_updated = datetime.now(timezone.utc)
+    item.sqlmodel_update(BaseModelUpdate().model_dump())
     session.add(item)
     session.commit()
     session.refresh(item)
@@ -196,7 +199,7 @@ def activate_item(
     if not current_user.is_superuser and (item.owner_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
     item.is_active = True
-    item.date_updated = datetime.now(timezone.utc)
+    item.sqlmodel_update(BaseModelUpdate().model_dump())
     session.add(item)
     session.commit()
     session.refresh(item)
@@ -219,7 +222,7 @@ def deactivate_item(
     if not current_user.is_superuser and (item.owner_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
     item.is_active = False
-    item.date_updated = datetime.now(timezone.utc)
+    item.sqlmodel_update(BaseModelUpdate().model_dump())
     session.add(item)
     session.commit()
     session.refresh(item)
