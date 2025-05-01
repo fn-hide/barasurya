@@ -1,7 +1,6 @@
 import uuid
 from typing import Any
 
-from datetime import datetime, timezone
 from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select, and_
 
@@ -49,7 +48,7 @@ def read_item_category(session: SessionDep, current_user: CurrentUser, id: uuid.
     """
     item_category = session.get(ItemCategory, id)
     if not item_category:
-        raise HTTPException(status_code=404, detail="Item not found")
+        raise HTTPException(status_code=404, detail="Item category not found")
     if not current_user.is_superuser and (item_category.owner_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
     return item_category
@@ -82,7 +81,7 @@ def update_item_category(
     """
     item_category = session.get(ItemCategory, id)
     if not item_category:
-        raise HTTPException(status_code=404, detail="Item not found")
+        raise HTTPException(status_code=404, detail="Item category not found")
     if not current_user.is_superuser and (item_category.owner_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
     update_dict = item_category_in.model_dump(exclude_unset=True)
@@ -102,7 +101,7 @@ def delete_item_category(
     """
     item_category = session.get(ItemCategory, id)
     if not item_category:
-        raise HTTPException(status_code=404, detail="Item not found")
+        raise HTTPException(status_code=404, detail="Item category not found")
     if not current_user.is_superuser and (item_category.owner_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
     session.delete(item_category)
