@@ -1,7 +1,9 @@
 import uuid
+from datetime import datetime
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship
 
+from app.utils import utcnow
 from app.models import BaseModel
 
 
@@ -44,6 +46,8 @@ class UpdatePassword(BaseModel):
 class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
+    date_created: datetime = Field(default_factory=utcnow)
+    date_updated: datetime = Field(default_factory=utcnow)
     
     items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True) # type: ignore
     item_categories: list["ItemCategory"] = Relationship(back_populates="owner", cascade_delete=True) # type: ignore
@@ -53,6 +57,8 @@ class User(UserBase, table=True):
 # Properties to return via API, id is always required
 class UserPublic(UserBase):
     id: uuid.UUID
+    date_created: datetime
+    date_updated: datetime
 
 
 class UsersPublic(BaseModel):

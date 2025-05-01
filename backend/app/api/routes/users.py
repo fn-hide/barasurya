@@ -23,6 +23,7 @@ from app.models import (
     UsersPublic,
     UserUpdate,
     UserUpdateMe,
+    BaseModelUpdate,
 )
 from app.utils import generate_new_account_email, send_email
 
@@ -90,6 +91,7 @@ def update_user_me(
                 status_code=409, detail="User with this email already exists"
             )
     user_data = user_in.model_dump(exclude_unset=True)
+    user_data.update(BaseModelUpdate().model_dump())
     current_user.sqlmodel_update(user_data)
     session.add(current_user)
     session.commit()
@@ -112,6 +114,7 @@ def update_password_me(
         )
     hashed_password = get_password_hash(body.new_password)
     current_user.hashed_password = hashed_password
+    current_user.sqlmodel_update(BaseModelUpdate().model_dump())
     session.add(current_user)
     session.commit()
     return Message(message="Password updated successfully")
