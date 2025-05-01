@@ -106,7 +106,9 @@ class ItemCategoryUpdate(ItemCategoryBase):
 class ItemCategory(ItemCategoryBase, table=True):
     __tablename__ = "item_category"
     
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)    
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    date_created: datetime = Field(default_factory=utcnow)
+    date_updated: datetime = Field(default_factory=utcnow)
     
     owner_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
