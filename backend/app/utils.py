@@ -121,3 +121,8 @@ def verify_password_reset_token(token: str) -> str | None:
         return str(decoded_token["sub"])
     except InvalidTokenError:
         return None
+
+
+# a helper function to generate a datetime in utc
+def utcnow() -> datetime:
+    return datetime.now(timezone.utc)
