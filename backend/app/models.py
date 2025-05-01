@@ -121,6 +121,8 @@ class ItemCategory(ItemCategoryBase, table=True):
 class ItemCategoryPublic(ItemCategoryBase):
     id: uuid.UUID
     owner_id: uuid.UUID
+    date_created: datetime
+    date_updated: datetime
 
 
 class ItemCategoriesPublic(BaseModel):
@@ -172,6 +174,8 @@ class Item(ItemBase, table=True):
 class ItemPublic(ItemBase):
     id: uuid.UUID
     owner_id: uuid.UUID
+    date_created: datetime
+    date_updated: datetime
 
 
 class ItemsPublic(BaseModel):
