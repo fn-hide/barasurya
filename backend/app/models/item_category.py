@@ -29,9 +29,9 @@ class ItemCategory(ItemCategoryBase, table=True):
     owner_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
-    owner: "User" = Relationship(back_populates="item_categories")
+    owner: "User" = Relationship(back_populates="item_categories") # type: ignore
     
-    items: list["Item"] = Relationship(back_populates="item_category", cascade_delete=True)
+    items: list["Item"] = Relationship(back_populates="item_category", cascade_delete=True) # type: ignore
 
 
 class ItemCategoryPublic(ItemCategoryBase):

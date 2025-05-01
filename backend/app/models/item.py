@@ -37,17 +37,17 @@ class Item(ItemBase, table=True):
     owner_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
-    owner: "User" = Relationship(back_populates="items")
+    owner: "User" = Relationship(back_populates="items") # type: ignore
     
     item_category_id: uuid.UUID = Field(
         foreign_key="item_category.id", nullable=False, ondelete="CASCADE"
     )
-    item_category: "ItemCategory" = Relationship(back_populates="items")
+    item_category: "ItemCategory" = Relationship(back_populates="items") # type: ignore
     
     item_unit_id: uuid.UUID = Field(
         foreign_key="item_unit.id", nullable=False, ondelete="CASCADE"
     )
-    item_unit: "ItemUnit" = Relationship(back_populates="items")
+    item_unit: "ItemUnit" = Relationship(back_populates="items") # type: ignore
 
 
 # Properties to return via API, id is always required
