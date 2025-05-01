@@ -175,7 +175,6 @@ class ItemUnitsPublic(BaseModel):
 class ItemBase(BaseModel):
     title: str = Field(min_length=1, max_length=255)
     description: str | None = Field(default=None, max_length=255)
-    unit: str | None = Field(default=None, max_length=20)
     price_purchase: float | None = None
     price_sell: float | None = None
     stock: int = Field(default=0, ge=0)  # ge=0 prevent stock to be negative
@@ -213,7 +212,7 @@ class Item(ItemBase, table=True):
     item_unit_id: uuid.UUID = Field(
         foreign_key="item_unit.id", nullable=False, ondelete="CASCADE"
     )
-    item_unit: ItemCategory | None = Relationship(back_populates="items")
+    item_unit: ItemUnit | None = Relationship(back_populates="items")
 
 
 # Properties to return via API, id is always required
