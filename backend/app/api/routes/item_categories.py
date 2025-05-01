@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select, and_
 
 from app.api.deps import CurrentUser, SessionDep
-from app.models import ItemCategory, ItemCategoryCreate, ItemCategoryPublic, ItemCategoriesPublic, ItemCategoryUpdate, Message
+from app.models import ItemCategory, ItemCategoryCreate, ItemCategoryPublic, ItemCategoriesPublic, ItemCategoryUpdate, Message, BaseModelUpdate
 
 router = APIRouter(prefix="/item_categories", tags=["item_categories"])
 
@@ -85,6 +85,7 @@ def update_item_category(
     if not current_user.is_superuser and (item_category.owner_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
     update_dict = item_category_in.model_dump(exclude_unset=True)
+    update_dict.update(BaseModelUpdate().model_dump())
     item_category.sqlmodel_update(update_dict)
     session.add(item_category)
     session.commit()
