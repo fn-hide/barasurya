@@ -17,7 +17,7 @@ import {
 } from "@tanstack/react-router"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
-import Logo from "/assets/images/fastapi-logo.svg"
+import Logo from "/assets/images/barasurya-logo.png"
 import type { UserRegister } from "../client"
 import useAuth, { isLoggedIn } from "../hooks/useAuth"
 import { confirmPasswordRules, emailPattern, passwordRules } from "../utils"
@@ -74,7 +74,7 @@ function SignUp() {
         >
           <Image
             src={Logo}
-            alt="FastAPI logo"
+            alt="Barasurya logo"
             height="auto"
             maxW="2xs"
             alignSelf="center"
