@@ -21,11 +21,14 @@ class ItemBase(BaseModel):
 # Properties to receive on item creation
 class ItemCreate(ItemBase):
     item_category_id: uuid.UUID
+    item_unit_id: uuid.UUID
 
 
 # Properties to receive on item update
 class ItemUpdate(ItemBase):
     title: str | None = Field(default=None, min_length=1, max_length=255)  # type: ignore
+    item_category_id: uuid.UUID | None = Field(default=None)
+    item_unit_id: uuid.UUID | None = Field(default=None)
 
 
 # Database model, database table inferred from class name
@@ -54,6 +57,8 @@ class Item(ItemBase, table=True):
 class ItemPublic(ItemBase):
     id: uuid.UUID
     owner_id: uuid.UUID
+    item_category_id: uuid.UUID
+    item_unit_id: uuid.UUID
     date_created: datetime
     date_updated: datetime
 
