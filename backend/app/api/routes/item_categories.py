@@ -107,6 +107,6 @@ def delete_item_category(
         raise HTTPException(status_code=400, detail="Not enough permissions")
     session.delete(item_category)
     session.commit()
-    return Message(message="Item deleted successfully")
+    return Message(message="Item category deleted successfully")
 
 # TODO: consider to add a feature for getting low stock item categories
