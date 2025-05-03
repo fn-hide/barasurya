@@ -107,6 +107,6 @@ def delete_item_unit(
         raise HTTPException(status_code=400, detail="Not enough permissions")
     session.delete(item_unit)
     session.commit()
-    return Message(message="Item deleted successfully")
+    return Message(message="Item unit deleted successfully")
 
 # TODO: consider to add a feature for getting low stock item units
