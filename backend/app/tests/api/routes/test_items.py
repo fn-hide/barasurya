@@ -5,12 +5,16 @@ from sqlmodel import Session
 
 from app.core.config import settings
 from app.tests.utils.item import create_random_item
+from app.tests.utils.item_category import create_random_item_category
+from app.tests.utils.item_unit import create_random_item_unit
 
 
 def test_create_item(
-    client: TestClient, superuser_token_headers: dict[str, str]
+    client: TestClient, superuser_token_headers: dict[str, str], db: Session
 ) -> None:
-    data = {"title": "Foo", "description": "Fighters"}
+    item_category = create_random_item_category(db)
+    item_unit = create_random_item_unit(db)
+    data = {"title": "Foo", "description": "Fighters", "item_category_id": str(item_category.id), "item_unit_id": str(item_unit.id)}
     response = client.post(
         f"{settings.API_V1_STR}/items/",
         headers=superuser_token_headers,
