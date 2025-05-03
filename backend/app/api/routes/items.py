@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select, and_
 
 from app.api.deps import CurrentUser, SessionDep
-from app.models import Item, ItemCreate, ItemPublic, ItemsPublic, ItemUpdate, BaseModelUpdate, Message, ItemCategory
+from app.models import Item, ItemCreate, ItemPublic, ItemsPublic, ItemUpdate, BaseModelUpdate, Message, ItemCategory, ItemUnit
 
 router = APIRouter(prefix="/items", tags=["items"])
 
@@ -64,6 +64,9 @@ def create_item(
     item_category = session.get(ItemCategory, item_in.item_category_id)
     if not item_category:
         raise HTTPException(status_code=404, detail="Item category not found")
+    item_unit = session.get(ItemUnit, item_in.item_unit_id)
+    if not item_unit:
+        raise HTTPException(status_code=404, detail="Item unit not found")
     item = Item.model_validate(item_in, update={"owner_id": current_user.id})
     session.add(item)
     session.commit()
@@ -87,9 +90,19 @@ def update_item(
         raise HTTPException(status_code=404, detail="Item not found")
     if not current_user.is_superuser and (item.owner_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
+    
     update_dict = item_in.model_dump(exclude_unset=True)
     update_dict.update(BaseModelUpdate().model_dump())
+    if "item_category_id" in item_in:
+        item_category = session.get(ItemCategory, item_in.item_category_id)
+        if not item_category:
+            raise HTTPException(status_code=404, detail="Item category not found")
+    if "item_unit_id" in item_in:
+        item_unit = session.get(ItemUnit, item_in.item_unit_id)
+        if not item_unit:
+            raise HTTPException(status_code=404, detail="Item unit not found")    
     item.sqlmodel_update(update_dict)
+    
     session.add(item)
     session.commit()
     session.refresh(item)
