@@ -39,6 +39,7 @@ from app.models.user import *
 from app.models.item_category import *
 from app.models.item_unit import *
 from app.models.item import *
+from app.models.store import *
 
 # --- below same with above but auto-completion is not supported--- #
 # # get the current directory name
