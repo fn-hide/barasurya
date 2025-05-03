@@ -59,3 +59,5 @@ from app.models.item import *
 #             if not attr.startswith("_"):
 #                 globals()[attr] = getattr(module, attr)
 #                 __all__.append(attr)
+
+# TODO: consider to add "is_deleted" column (soft-delete)
