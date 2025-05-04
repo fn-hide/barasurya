@@ -4,7 +4,7 @@ from typing import Any
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
-from app.models import Item, ItemCreate, User, UserCreate, UserUpdate, BaseModelUpdate, ItemCategory, ItemCategoryCreate, ItemUnit, ItemUnitCreate, StoreCreate, Store
+from app.models import Item, ItemCreate, User, UserCreate, UserUpdate, BaseModelUpdate, ItemCategory, ItemCategoryCreate, ItemUnit, ItemUnitCreate, StoreCreate, Store, SupplierCreate, Supplier
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
@@ -77,3 +77,11 @@ def create_store(*, session: Session, store_in: StoreCreate, owner_id: uuid.UUID
     session.commit()
     session.refresh(db_store)
     return db_store
+
+
+def create_supplier(*, session: Session, supplier_in: SupplierCreate, owner_id: uuid.UUID) -> Supplier:
+    db_supplier = Supplier.model_validate(supplier_in, update={"owner_id": owner_id})
+    session.add(db_supplier)
+    session.commit()
+    session.refresh(db_supplier)
+    return db_supplier
