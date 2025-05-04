@@ -28,7 +28,7 @@ class Supplier(SupplierBase, table=True):
     owner_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
-    owner: "User" = Relationship(back_populates="stores") # type: ignore
+    owner: "User" = Relationship(back_populates="suppliers") # type: ignore
     
 
 class SupplierPublic(SupplierBase):
