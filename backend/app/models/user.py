@@ -54,6 +54,8 @@ class User(UserBase, table=True):
     item_units: list["ItemUnit"] = Relationship(back_populates="owner", cascade_delete=True) # type: ignore
     stores: list["Store"] = Relationship(back_populates="owner", cascade_delete=True) # type: ignore
     suppliers: list["Supplier"] = Relationship(back_populates="owner", cascade_delete=True) # type: ignore
+    customer_types: list["CustomerType"] = Relationship(back_populates="owner", cascade_delete=True) # type: ignore
+    customers: list["Customer"] = Relationship(back_populates="owner", cascade_delete=True) # type: ignore
 
 
 # Properties to return via API, id is always required
