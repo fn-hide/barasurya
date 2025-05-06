@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class SaleBase(BaseModel):
-    date_sold: datetime
+    date_sol: datetime
     amount: float = Field(default=0, ge=0)
     description: str | None = Field(default=None, max_length=255)
 
@@ -25,7 +25,7 @@ class SaleCreate(SaleBase):
 
 
 class SaleUpdate(SaleBase):
-    date_sold: datetime | None = Field(default=0)  # type: ignore
+    date_sol: datetime | None = Field(default=0)  # type: ignore
     amount: float | None = Field(default=0, ge=0)  # type: ignore
 
 

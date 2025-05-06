@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class PurchaseBase(BaseModel):
-    date_purchased: datetime
+    date_purchase: datetime
     amount: float = Field(default=0, ge=0)
     description: str | None = Field(default=None, max_length=255)
 
@@ -25,7 +25,7 @@ class PurchaseCreate(PurchaseBase):
 
 
 class PurchaseUpdate(PurchaseBase):
-    date_purchased: datetime | None = Field(default=0)  # type: ignore
+    date_purchase: datetime | None = Field(default=0)  # type: ignore
     amount: float | None = Field(default=0, ge=0)  # type: ignore
 
 

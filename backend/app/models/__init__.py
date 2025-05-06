@@ -1,6 +1,7 @@
 from app.models.base import (
     BaseModel,
     BaseModelUpdate,
+    SQLModel,
 )
 from app.models.customer import (
     Customer,
@@ -80,6 +81,7 @@ from app.models.user import (
 )
 
 __all__ = [
+    "SQLModel",
     "BaseModel",
     "BaseModelUpdate",
     "CustomerType",
