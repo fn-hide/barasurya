@@ -30,6 +30,13 @@ from app.models.item_category import (
     ItemCategoryPublic,
     ItemCategoryUpdate,
 )
+from app.models.item_unit import (
+    ItemUnit,
+    ItemUnitCreate,
+    ItemUnitPublic,
+    ItemUnitsPublic,
+    ItemUnitUpdate,
+)
 from app.models.main import (
     Message,
     NewPassword,
@@ -90,6 +97,11 @@ __all__ = [
     "ItemCategoryUpdate",
     "ItemCategoryPublic",
     "ItemCategoriesPublic",
+    "ItemUnit",
+    "ItemUnitCreate",
+    "ItemUnitUpdate",
+    "ItemUnitPublic",
+    "ItemUnitsPublic",
     "Item",
     "ItemCreate",
     "ItemUpdate",

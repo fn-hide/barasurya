@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from app.models.item_category import ItemCategory
     from app.models.item_unit import ItemUnit
     from app.models.purchase_item import PurchaseItem
+    from app.models.sale_item import SaleItem
     from app.models.user import User
 
 
@@ -53,15 +54,19 @@ class Item(ItemBase, table=True):
     item_category_id: uuid.UUID = Field(
         foreign_key="item_category.id", nullable=False, ondelete="CASCADE"
     )
-    item_category: "ItemCategory" = Relationship(back_populates="items")  # type: ignore
+    item_category: "ItemCategory" = Relationship(back_populates="item")  # type: ignore
 
     item_unit_id: uuid.UUID = Field(
         foreign_key="item_unit.id", nullable=False, ondelete="CASCADE"
     )
-    item_unit: "ItemUnit" = Relationship(back_populates="items")  # type: ignore
+    item_unit: "ItemUnit" = Relationship(back_populates="item")  # type: ignore
 
-    purchase_item: list["PurchaseItem"] = Relationship(  # type: ignore
+    purchase_item: "PurchaseItem" = Relationship(  # type: ignore
         back_populates="purchase", cascade_delete=True
+    )
+
+    sale_item: "SaleItem" = Relationship(  # type: ignore
+        back_populates="item", cascade_delete=True
     )
 
 
