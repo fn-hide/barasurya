@@ -4,9 +4,8 @@ from fastapi.testclient import TestClient
 from sqlmodel import Session
 
 from app.core.config import settings
-from app.tests.conftest import authentication_token_from_email
-from app.tests.utils.user import create_random_user
 from app.tests.utils.item_category import create_random_item_category
+from app.tests.utils.user import authentication_token_from_email, create_random_user
 
 
 def test_create_item_category(
@@ -81,13 +80,13 @@ def test_read_item_categories(
     assert len(content["data"]) >= 2
 
 
-def test_read_item_categories_with_owner(
-    client: TestClient, db: Session
-) -> None:
+def test_read_item_categories_with_owner(client: TestClient, db: Session) -> None:
     user = create_random_user(db=db)
     create_random_item_category(db, user)
     create_random_item_category(db, user)
-    user_token_headers = authentication_token_from_email(client=client, email=user.email, db=db)
+    user_token_headers = authentication_token_from_email(
+        client=client, email=user.email, db=db
+    )
     response = client.get(
         f"{settings.API_V1_STR}/item_categories/",
         headers=user_token_headers,
