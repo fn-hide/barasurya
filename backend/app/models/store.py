@@ -1,9 +1,15 @@
 import uuid
 from datetime import datetime
+from typing import TYPE_CHECKING
+
 from sqlmodel import Field, Relationship
 
-from app.utils import utcnow
 from app.models import BaseModel
+from app.utils import utcnow
+
+if TYPE_CHECKING:
+    from app.models.purchase import Purchase
+    from app.models.user import User
 
 
 class StoreBase(BaseModel):
@@ -25,12 +31,16 @@ class Store(StoreBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     date_created: datetime = Field(default_factory=utcnow)
     date_updated: datetime = Field(default_factory=utcnow)
-    
+
     owner_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
-    owner: "User" = Relationship(back_populates="stores") # type: ignore
-    
+    owner: "User" = Relationship(back_populates="stores")  # type: ignore
+
+    purchase: list["Purchase"] = Relationship(  # type: ignore
+        back_populates="store", cascade_delete=True
+    )
+
 
 class StorePublic(StoreBase):
     id: uuid.UUID

@@ -1,48 +1,133 @@
 # import os
 # import importlib
 # import pkgutil
-from datetime import datetime
-from pydantic import ConfigDict
-from sqlmodel import Field, SQLModel
+from app.models.base import (
+    BaseModel,
+    BaseModelUpdate,
+)
+from app.models.customer import (
+    Customer,
+    CustomerCreate,
+    CustomerPublic,
+    CustomersPublic,
+    CustomerUpdate,
+)
+from app.models.customer_type import (
+    CustomerType,
+    CustomerTypeCreate,
+    CustomerTypePublic,
+    CustomerTypesPublic,
+    CustomerTypeUpdate,
+)
+from app.models.item import (
+    Item,
+    ItemCreate,
+    ItemPublic,
+    ItemsPublic,
+    ItemUpdate,
+)
+from app.models.item_category import (
+    ItemCategoriesPublic,
+    ItemCategory,
+    ItemCategoryCreate,
+    ItemCategoryPublic,
+    ItemCategoryUpdate,
+)
+from app.models.main import (
+    Message,
+    NewPassword,
+    Token,
+    TokenPayload,
+)
+from app.models.purchase import (
+    Purchase,
+    PurchaseCreate,
+    PurchasePublic,
+    PurchasesPublic,
+    PurchaseUpdate,
+)
+from app.models.purchase_item import (
+    PurchaseItem,
+    PurchaseItemCreate,
+    PurchaseItemPublic,
+    PurchaseItemsPublic,
+    PurchaseItemUpdate,
+)
+from app.models.store import (
+    Store,
+    StoreCreate,
+    StorePublic,
+    StoresPublic,
+    StoreUpdate,
+)
+from app.models.supplier import (
+    Supplier,
+    SupplierCreate,
+    SupplierPublic,
+    SuppliersPublic,
+    SupplierUpdate,
+)
+from app.models.user import (
+    User,
+    UserCreate,
+    UserPublic,
+    UsersPublic,
+    UserUpdate,
+)
 
-from app.utils import utcnow
-
-
-# setup constraint naming convention, so we add flexibility to modify constraint later
-# source: https://github.com/fastapi/sqlmodel/discussions/1213
-convention = {
-    "ix": "ix_%(column_0_label)s",
-    "uq": "uq_%(table_name)s_%(column_0_name)s",
-    "ck": "ck_%(table_name)s_%(constraint_name)s",
-    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-    "pk": "pk_%(table_name)s",
-}
-
-
-class BaseModel(SQLModel):
-    """Base model for everything by add naming convention feature."""
-
-    model_config = ConfigDict(
-        protected_namespaces=(),
-    )  # type: ignore
-
-
-BaseModel.metadata.naming_convention = convention
-
-
-class BaseModelUpdate(BaseModel):
-    date_updated: datetime = Field(default_factory=utcnow)
-
-
-from app.models.main import *
-from app.models.user import *
-from app.models.item_category import *
-from app.models.item_unit import *
-from app.models.item import *
-from app.models.store import *
-from app.models.supplier import *
-from app.models.customer import *
-from app.models.customer_type import *
+__all__ = [
+    "BaseModel",
+    "BaseModelUpdate",
+    "CustomerType",
+    "CustomerTypeCreate",
+    "CustomerTypeUpdate",
+    "CustomerTypePublic",
+    "CustomerTypesPublic",
+    "Customer",
+    "CustomerCreate",
+    "CustomerUpdate",
+    "CustomerPublic",
+    "CustomersPublic",
+    "ItemCategory",
+    "ItemCategoryCreate",
+    "ItemCategoryUpdate",
+    "ItemCategoryPublic",
+    "ItemCategoriesPublic",
+    "Item",
+    "ItemCreate",
+    "ItemUpdate",
+    "ItemPublic",
+    "ItemsPublic",
+    "Message",
+    "Token",
+    "TokenPayload",
+    "NewPassword",
+    "PurchaseItem",
+    "PurchaseItemCreate",
+    "PurchaseItemUpdate",
+    "PurchaseItemPublic",
+    "PurchaseItemsPublic",
+    "Purchase",
+    "PurchaseCreate",
+    "PurchaseUpdate",
+    "PurchasePublic",
+    "PurchasesPublic",
+    "Store",
+    "StoreCreate",
+    "StoreUpdate",
+    "StorePublic",
+    "StoresPublic",
+    "Supplier",
+    "SupplierCreate",
+    "SupplierUpdate",
+    "SupplierPublic",
+    "SuppliersPublic",
+    "User",
+    "UserCreate",
+    "UserUpdate",
+    "UserPublic",
+    "UsersPublic",
+]
 
 # --- below same with above but auto-completion is not supported--- #
 # # get the current directory name
