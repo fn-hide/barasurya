@@ -1,4 +1,4 @@
-# FastAPI Project - Development
+# Barasurya Project - Development
 
 ## Docker Compose
 
