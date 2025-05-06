@@ -1,4 +1,4 @@
-# FastAPI Project - Backend
+# Barasurya Project - Backend
 
 ## Requirements
 
@@ -115,6 +115,14 @@ For example, to stop on first error:
 
 ```bash
 docker compose exec backend bash scripts/tests-start.sh -x
+```
+
+### Test running file
+
+If you just want to run the one test file, you can use:
+
+```bash
+docker compose exec backend bash app/tests/api/routes/test_customers.py
 ```
 
 ### Test Coverage
