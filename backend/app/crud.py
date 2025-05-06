@@ -4,7 +4,7 @@ from typing import Any
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
-from app.models import Item, ItemCreate, User, UserCreate, UserUpdate, BaseModelUpdate, ItemCategory, ItemCategoryCreate, ItemUnit, ItemUnitCreate, StoreCreate, Store, SupplierCreate, Supplier, CustomerTypeCreate, CustomerType
+from app.models import Item, ItemCreate, User, UserCreate, UserUpdate, BaseModelUpdate, ItemCategory, ItemCategoryCreate, ItemUnit, ItemUnitCreate, StoreCreate, Store, SupplierCreate, Supplier, CustomerTypeCreate, CustomerType, CustomerCreate, Customer
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
@@ -93,3 +93,11 @@ def create_customer_type(*, session: Session, customer_type_in: CustomerTypeCrea
     session.commit()
     session.refresh(db_customer_type)
     return db_customer_type
+
+
+def create_customer(*, session: Session, customer_in: CustomerCreate, owner_id: uuid.UUID) -> Customer:
+    db_customer = Customer.model_validate(customer_in, update={"owner_id": owner_id})
+    session.add(db_customer)
+    session.commit()
+    session.refresh(db_customer)
+    return db_customer

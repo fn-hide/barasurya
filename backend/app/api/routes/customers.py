@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException
 from sqlmodel import func, select
 
 from app.api.deps import CurrentUser, SessionDep
-from app.models import Customer, CustomerCreate, CustomerPublic, CustomersPublic, CustomerUpdate, Message, BaseModelUpdate
+from app.models import Customer, CustomerCreate, CustomerPublic, CustomersPublic, CustomerUpdate, CustomerType, Message, BaseModelUpdate
 
 router = APIRouter(prefix="/customers", tags=["customers"])
 
@@ -61,6 +61,9 @@ def create_customer(
     """
     Create new customer type.
     """
+    customer_type = session.get(CustomerType, customer_in.customer_type_id)
+    if not customer_type:
+        raise HTTPException(status_code=404, detail="Customer type not found")
     customer = Customer.model_validate(customer_in, update={"owner_id": current_user.id})
     session.add(customer)
     session.commit()
@@ -84,6 +87,10 @@ def update_customer(
         raise HTTPException(status_code=404, detail="Customer not found")
     if not current_user.is_superuser and (customer.owner_id != current_user.id):
         raise HTTPException(status_code=400, detail="Not enough permissions")
+    if customer_in.customer_type_id is not None:
+        customer_type = session.get(CustomerType, customer_in.customer_type_id)
+        if not customer_type:
+            raise HTTPException(status_code=404, detail="Customer type not found")
     update_dict = customer_in.model_dump(exclude_unset=True)
     update_dict.update(BaseModelUpdate().model_dump())
     customer.sqlmodel_update(update_dict)

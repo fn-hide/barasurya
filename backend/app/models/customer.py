@@ -13,11 +13,12 @@ class CustomerBase(BaseModel):
 
 
 class CustomerCreate(CustomerBase):
-    pass
+    customer_type_id: uuid.UUID
 
 
 class CustomerUpdate(CustomerBase):
     name: str | None = Field(default=None, min_length=1, max_length=100)
+    customer_type_id: uuid.UUID | None = Field(default=None)
 
 
 class Customer(CustomerBase, table=True):
@@ -39,6 +40,7 @@ class Customer(CustomerBase, table=True):
 class CustomerPublic(CustomerBase):
     id: uuid.UUID
     owner_id: uuid.UUID
+    customer_type_id: uuid.UUID
     date_created: datetime
     date_updated: datetime
 
