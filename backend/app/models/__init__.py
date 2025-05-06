@@ -1,6 +1,3 @@
-# import os
-# import importlib
-# import pkgutil
 from app.models.base import (
     BaseModel,
     BaseModelUpdate,
@@ -130,6 +127,11 @@ __all__ = [
 ]
 
 # --- below same with above but auto-completion is not supported--- #
+# import os
+# import importlib
+# import pkgutil
+
+
 # # get the current directory name
 # package_dir = os.path.dirname(__file__)
 # package_name = __name__
