@@ -8,44 +8,43 @@ from app.models import BaseModel
 from app.utils import utcnow
 
 if TYPE_CHECKING:
-    from app.models.item import Item
     from app.models.user import User
 
 
-class ItemUnitBase(BaseModel):
+class AccountBase(BaseModel):
+    # TODO: add reference to "source" if the app going bigger
     name: str = Field(min_length=1, max_length=100)
+    balance: float = Field(default=0, ge=0)
     description: str | None = Field(default=None, max_length=255)
 
 
-class ItemUnitCreate(ItemUnitBase):
+class AccountCreate(AccountBase):
     pass
 
 
-class ItemUnitUpdate(ItemUnitBase):
+class AccountUpdate(AccountBase):
     name: str | None = Field(default=None, min_length=1, max_length=100)
+    balance: float | None = Field(default=0, ge=0)
 
 
-class ItemUnit(ItemUnitBase, table=True):
-    __tablename__ = "item_unit"
-
+class Account(AccountBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     date_created: datetime = Field(default_factory=utcnow)
     date_updated: datetime = Field(default_factory=utcnow)
+
     owner_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
-
-    owner: "User" = Relationship(back_populates="item_units")  # type: ignore
-    items: list["Item"] = Relationship(back_populates="item_unit", cascade_delete=True)  # type: ignore
+    owner: "User" = Relationship(back_populates="accounts")  # type: ignore
 
 
-class ItemUnitPublic(ItemUnitBase):
+class AccountPublic(AccountBase):
     id: uuid.UUID
     owner_id: uuid.UUID
     date_created: datetime
     date_updated: datetime
 
 
-class ItemUnitsPublic(BaseModel):
-    data: list[ItemUnitPublic]
+class AccountsPublic(BaseModel):
+    data: list[AccountPublic]
     count: int

@@ -31,13 +31,14 @@ class ItemCategory(ItemCategoryBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     date_created: datetime = Field(default_factory=utcnow)
     date_updated: datetime = Field(default_factory=utcnow)
-
     owner_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
-    owner: "User" = Relationship(back_populates="item_categories")  # type: ignore
 
-    item: "Item" = Relationship(back_populates="item_category", cascade_delete=True)  # type: ignore
+    owner: "User" = Relationship(back_populates="item_categories")  # type: ignore
+    items: list["Item"] = Relationship(
+        back_populates="item_category", cascade_delete=True
+    )  # type: ignore
 
 
 class ItemCategoryPublic(ItemCategoryBase):

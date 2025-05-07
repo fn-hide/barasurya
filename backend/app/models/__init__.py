@@ -58,6 +58,20 @@ from app.models.purchase_item import (
     PurchaseItemsPublic,
     PurchaseItemUpdate,
 )
+from app.models.sale import (
+    Sale,
+    SaleCreate,
+    SalePublic,
+    SalesPublic,
+    SaleUpdate,
+)
+from app.models.sale_item import (
+    SaleItem,
+    SaleItemCreate,
+    SaleItemPublic,
+    SaleItemsPublic,
+    SaleItemUpdate,
+)
 from app.models.store import (
     Store,
     StoreCreate,
@@ -123,6 +137,16 @@ __all__ = [
     "PurchaseUpdate",
     "PurchasePublic",
     "PurchasesPublic",
+    "SaleItem",
+    "SaleItemCreate",
+    "SaleItemUpdate",
+    "SaleItemPublic",
+    "SaleItemsPublic",
+    "Sale",
+    "SaleCreate",
+    "SaleUpdate",
+    "SalePublic",
+    "SalesPublic",
     "Store",
     "StoreCreate",
     "StoreUpdate",

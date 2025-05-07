@@ -30,13 +30,12 @@ class Supplier(SupplierBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     date_created: datetime = Field(default_factory=utcnow)
     date_updated: datetime = Field(default_factory=utcnow)
-
     owner_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
-    owner: "User" = Relationship(back_populates="suppliers")  # type: ignore
 
-    purchase: list["Purchase"] = Relationship(  # type: ignore
+    owner: "User" = Relationship(back_populates="suppliers")  # type: ignore
+    purchases: list["Purchase"] = Relationship(  # type: ignore
         back_populates="supplier", cascade_delete=True
     )
 

@@ -45,29 +45,21 @@ class Item(ItemBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     date_created: datetime = Field(default_factory=utcnow)
     date_updated: datetime = Field(default_factory=utcnow)
-
     owner_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
-    owner: "User" = Relationship(back_populates="items")  # type: ignore
-
     item_category_id: uuid.UUID = Field(
         foreign_key="item_category.id", nullable=False, ondelete="CASCADE"
     )
-    item_category: "ItemCategory" = Relationship(back_populates="item")  # type: ignore
-
     item_unit_id: uuid.UUID = Field(
         foreign_key="item_unit.id", nullable=False, ondelete="CASCADE"
     )
-    item_unit: "ItemUnit" = Relationship(back_populates="item")  # type: ignore
 
-    purchase_item: "PurchaseItem" = Relationship(  # type: ignore
-        back_populates="purchase", cascade_delete=True
-    )
-
-    sale_item: "SaleItem" = Relationship(  # type: ignore
-        back_populates="item", cascade_delete=True
-    )
+    owner: "User" = Relationship(back_populates="items")  # type: ignore
+    item_category: "ItemCategory" = Relationship(back_populates="items")  # type: ignore
+    item_unit: "ItemUnit" = Relationship(back_populates="items")  # type: ignore
+    purchase_items: list["PurchaseItem"] = Relationship(back_populates="item")  # type: ignore
+    sale_items: list["SaleItem"] = Relationship(back_populates="item")  # type: ignore
 
 
 # Properties to return via API, id is always required

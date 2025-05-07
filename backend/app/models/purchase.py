@@ -33,23 +33,20 @@ class Purchase(PurchaseBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     date_created: datetime = Field(default_factory=utcnow)
     date_updated: datetime = Field(default_factory=utcnow)
-
     owner_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
-    owner: "User" = Relationship(back_populates="purchase")  # type: ignore
-
     supplier_id: uuid.UUID = Field(
         foreign_key="supplier.id", nullable=False, ondelete="CASCADE"
     )
-    supplier: "Supplier" = Relationship(back_populates="purchase", cascade_delete=True)  # type: ignore
-
     store_id: uuid.UUID = Field(
         foreign_key="store.id", nullable=False, ondelete="CASCADE"
     )
-    store: "Store" = Relationship(back_populates="purchase", cascade_delete=True)  # type: ignore
 
-    purchase_item: list["PurchaseItem"] = Relationship(  # type: ignore
+    owner: "User" = Relationship(back_populates="purchases")  # type: ignore
+    supplier: "Supplier" = Relationship(back_populates="purchases")  # type: ignore
+    store: "Store" = Relationship(back_populates="purchases")  # type: ignore
+    purchase_items: list["PurchaseItem"] = Relationship(  # type: ignore
         back_populates="purchase", cascade_delete=True
     )
 

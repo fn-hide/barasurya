@@ -33,22 +33,19 @@ class Sale(SaleBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     date_created: datetime = Field(default_factory=utcnow)
     date_updated: datetime = Field(default_factory=utcnow)
-
     owner_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
-    owner: "User" = Relationship(back_populates="sale")  # type: ignore
-
     customer_id: uuid.UUID = Field(
         foreign_key="customer.id", nullable=False, ondelete="CASCADE"
     )
-    customer: "Customer" = Relationship(back_populates="sale", cascade_delete=True)  # type: ignore
-
     store_id: uuid.UUID = Field(
         foreign_key="store.id", nullable=False, ondelete="CASCADE"
     )
-    store: "Store" = Relationship(back_populates="sale", cascade_delete=True)  # type: ignore
 
+    owner: "User" = Relationship(back_populates="sales")  # type: ignore
+    customer: "Customer" = Relationship(back_populates="sales")  # type: ignore
+    store: "Store" = Relationship(back_populates="sales")  # type: ignore
     sale_items: list["SaleItem"] = Relationship(  # type: ignore
         back_populates="sale", cascade_delete=True
     )
