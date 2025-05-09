@@ -99,6 +99,12 @@ from app.models.stock_adjustment import (
     StockAdjustmentPublic,
     StockAdjustmentsPublic,
 )
+from app.models.stock_transfer import (
+    StockTransfer,
+    StockTransferCreate,
+    StockTransferPublic,
+    StockTransfersPublic,
+)
 from app.models.store import (
     Store,
     StoreCreate,
@@ -191,6 +197,10 @@ __all__ = [
     "StockAdjustmentCreate",
     "StockAdjustmentPublic",
     "StockAdjustmentsPublic",
+    "StockTransfer",
+    "StockTransferCreate",
+    "StockTransferPublic",
+    "StockTransfersPublic",
     "Store",
     "StoreCreate",
     "StoreUpdate",

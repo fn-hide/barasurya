@@ -20,6 +20,7 @@ if TYPE_CHECKING:
     from app.models.purchase import Purchase
     from app.models.sale import Sale
     from app.models.stock_adjustment import StockAdjustment
+    from app.models.stock_transfer import StockTransfer
     from app.models.store import Store
     from app.models.supplier import Supplier
 
@@ -97,6 +98,9 @@ class User(UserBase, table=True):
         back_populates="owner", cascade_delete=True
     )
     stock_adjustments: list["StockAdjustment"] = Relationship(
+        back_populates="owner", cascade_delete=True
+    )
+    stock_transfers: list["StockTransfer"] = Relationship(
         back_populates="owner", cascade_delete=True
     )
 

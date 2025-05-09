@@ -10,6 +10,7 @@ from app.utils import utcnow
 if TYPE_CHECKING:
     from app.models.purchase import Purchase
     from app.models.sale import Sale
+    from app.models.stock_transfer import StockTransfer
     from app.models.user import User
 
 
@@ -41,6 +42,12 @@ class Store(StoreBase, table=True):
         back_populates="store", cascade_delete=True
     )
     sales: list["Sale"] = Relationship(back_populates="store", cascade_delete=True)
+    src_stock_transfers: list["StockTransfer"] = Relationship(
+        back_populates="src_store", cascade_delete=True
+    )
+    dst_stock_transfers: list["StockTransfer"] = Relationship(
+        back_populates="dst_store", cascade_delete=True
+    )
 
 
 class StorePublic(StoreBase):
