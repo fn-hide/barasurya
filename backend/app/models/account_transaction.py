@@ -45,7 +45,6 @@ class AccountTransaction(AccountTransactionBase, table=True):
 
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     date_created: datetime = Field(default_factory=utcnow)
-    date_updated: datetime = Field(default_factory=utcnow)
     owner_id: uuid.UUID = Field(
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
@@ -61,7 +60,6 @@ class AccountTransactionPublic(AccountTransactionBase):
     id: uuid.UUID
     owner_id: uuid.UUID
     date_created: datetime
-    date_updated: datetime
 
 
 class AccountTransactionsPublic(BaseModel):

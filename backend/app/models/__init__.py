@@ -59,6 +59,12 @@ from app.models.main import (
     Token,
     TokenPayload,
 )
+from app.models.payment import (
+    Payment,
+    PaymentCreate,
+    PaymentPublic,
+    PaymentsPublic,
+)
 from app.models.purchase import (
     Purchase,
     PurchaseCreate,
@@ -151,6 +157,10 @@ __all__ = [
     "Token",
     "TokenPayload",
     "NewPassword",
+    "Payment",
+    "PaymentCreate",
+    "PaymentPublic",
+    "PaymentsPublic",
     "PurchaseItem",
     "PurchaseItemCreate",
     "PurchaseItemUpdate",
