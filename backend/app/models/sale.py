@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from app.models.customer import Customer
     from app.models.receivable import Receivable
     from app.models.sale_item import SaleItem
+    from app.models.sale_return import SaleReturn
     from app.models.store import Store
     from app.models.user import User
 
@@ -51,6 +52,9 @@ class Sale(SaleBase, table=True):
         back_populates="sale", cascade_delete=True
     )
     receivables: list["Receivable"] = Relationship(
+        back_populates="sale", cascade_delete=True
+    )
+    sale_returns: list["SaleReturn"] = Relationship(
         back_populates="sale", cascade_delete=True
     )
 

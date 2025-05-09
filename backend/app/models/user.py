@@ -19,8 +19,10 @@ if TYPE_CHECKING:
     from app.models.payable import Payable
     from app.models.payment import Payment
     from app.models.purchase import Purchase
+    from app.models.purchase_return import PurchaseReturn
     from app.models.receivable import Receivable
     from app.models.sale import Sale
+    from app.models.sale_return import SaleReturn
     from app.models.stock_adjustment import StockAdjustment
     from app.models.stock_transfer import StockTransfer
     from app.models.store import Store
@@ -109,6 +111,12 @@ class User(UserBase, table=True):
         back_populates="owner", cascade_delete=True
     )
     receivables: list["Receivable"] = Relationship(
+        back_populates="owner", cascade_delete=True
+    )
+    sale_returns: list["SaleReturn"] = Relationship(
+        back_populates="owner", cascade_delete=True
+    )
+    purchase_returns: list["PurchaseReturn"] = Relationship(
         back_populates="owner", cascade_delete=True
     )
 

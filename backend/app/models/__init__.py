@@ -86,6 +86,13 @@ from app.models.purchase_item import (
     PurchaseItemsPublic,
     PurchaseItemUpdate,
 )
+from app.models.purchase_return import (
+    PurchaseReturn,
+    PurchaseReturnCreate,
+    PurchaseReturnPublic,
+    PurchaseReturnsPublic,
+    PurchaseReturnUpdate,
+)
 from app.models.receivable import (
     Receivable,
     ReceivableCreate,
@@ -106,6 +113,13 @@ from app.models.sale_item import (
     SaleItemPublic,
     SaleItemsPublic,
     SaleItemUpdate,
+)
+from app.models.sale_return import (
+    SaleReturn,
+    SaleReturnCreate,
+    SaleReturnPublic,
+    SaleReturnsPublic,
+    SaleReturnUpdate,
 )
 from app.models.stock_adjustment import (
     StockAdjustment,
@@ -197,6 +211,16 @@ __all__ = [
     "PurchaseUpdate",
     "PurchasePublic",
     "PurchasesPublic",
+    "PurchaseReturn",
+    "PurchaseReturnCreate",
+    "PurchaseReturnUpdate",
+    "PurchaseReturnPublic",
+    "PurchaseReturnsPublic",
+    "SaleReturn",
+    "SaleReturnCreate",
+    "SaleReturnUpdate",
+    "SaleReturnPublic",
+    "SaleReturnsPublic",
     "SaleItem",
     "SaleItemCreate",
     "SaleItemUpdate",
