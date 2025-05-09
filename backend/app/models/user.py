@@ -9,6 +9,8 @@ from app.models import BaseModel
 from app.utils import utcnow
 
 if TYPE_CHECKING:
+    from app.models.account import Account
+    from app.models.account_transaction import AccountTransaction
     from app.models.customer import Customer
     from app.models.customer_type import CustomerType
     from app.models.item import Item
@@ -91,6 +93,12 @@ class User(UserBase, table=True):
         back_populates="owner", cascade_delete=True
     )
     sale_items: list["SaleItem"] = Relationship(  # type: ignore
+        back_populates="owner", cascade_delete=True
+    )
+    accounts: list["Account"] = Relationship(  # type: ignore
+        back_populates="owner", cascade_delete=True
+    )
+    account_transactions: list["AccountTransaction"] = Relationship(  # type: ignore
         back_populates="owner", cascade_delete=True
     )
 

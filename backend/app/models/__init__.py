@@ -1,3 +1,16 @@
+from app.models.account import (
+    Account,
+    AccountCreate,
+    AccountPublic,
+    AccountsPublic,
+    AccountUpdate,
+)
+from app.models.account_transaction import (
+    AccountTransaction,
+    AccountTransactionCreate,
+    AccountTransactionPublic,
+    AccountTransactionsPublic,
+)
 from app.models.base import (
     BaseModel,
     BaseModelUpdate,
@@ -103,6 +116,15 @@ __all__ = [
     "CustomerTypeUpdate",
     "CustomerTypePublic",
     "CustomerTypesPublic",
+    "Account",
+    "AccountCreate",
+    "AccountUpdate",
+    "AccountPublic",
+    "AccountsPublic",
+    "AccountTransaction",
+    "AccountTransactionCreate",
+    "AccountTransactionPublic",
+    "AccountTransactionsPublic",
     "Customer",
     "CustomerCreate",
     "CustomerUpdate",
