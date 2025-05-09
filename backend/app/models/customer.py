@@ -9,6 +9,7 @@ from app.utils import utcnow
 
 if TYPE_CHECKING:
     from app.models.customer_type import CustomerType
+    from app.models.receivable import Receivable
     from app.models.sale import Sale
     from app.models.user import User
 
@@ -42,6 +43,9 @@ class Customer(CustomerBase, table=True):
     owner: "User" = Relationship(back_populates="customers")
     customer_type: "CustomerType" = Relationship(back_populates="customers")
     sales: list["Sale"] = Relationship(back_populates="customer", cascade_delete=True)
+    receivables: list["Receivable"] = Relationship(
+        back_populates="customer", cascade_delete=True
+    )
 
 
 class CustomerPublic(CustomerBase):

@@ -8,6 +8,7 @@ from app.models import BaseModel
 from app.utils import utcnow
 
 if TYPE_CHECKING:
+    from app.models.payable import Payable
     from app.models.purchase import Purchase
     from app.models.user import User
 
@@ -36,6 +37,9 @@ class Supplier(SupplierBase, table=True):
 
     owner: "User" = Relationship(back_populates="suppliers")
     purchases: list["Purchase"] = Relationship(
+        back_populates="supplier", cascade_delete=True
+    )
+    payables: list["Payable"] = Relationship(
         back_populates="supplier", cascade_delete=True
     )
 

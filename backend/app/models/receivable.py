@@ -9,28 +9,29 @@ from app.utils import utcnow
 
 if TYPE_CHECKING:
     from app.models.customer import Customer
-    from app.models.receivable import Receivable
-    from app.models.sale_item import SaleItem
-    from app.models.store import Store
+    from app.models.sale import Sale
     from app.models.user import User
 
 
-class SaleBase(BaseModel):
-    date_sale: datetime
+class ReceivableBase(BaseModel):
+    date_payable: datetime
     amount: float = Field(default=0, ge=0)
+    amount_paid: float = Field(default=0, ge=0)
+    status: str | None = Field(default=None, max_length=255)
     description: str | None = Field(default=None, max_length=255)
 
 
-class SaleCreate(SaleBase):
+class ReceivableCreate(ReceivableBase):
     pass
 
 
-class SaleUpdate(SaleBase):
-    date_sale: datetime | None = Field(default=0)  # type: ignore
+class ReceivableUpdate(ReceivableBase):
+    date_payable: datetime | None = Field(default=0)  # type: ignore
     amount: float | None = Field(default=0, ge=0)  # type: ignore
+    amount_paid: float | None = Field(default=0, ge=0)  # type: ignore
 
 
-class Sale(SaleBase, table=True):
+class Receivable(ReceivableBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     date_created: datetime = Field(default_factory=utcnow)
     date_updated: datetime = Field(default_factory=utcnow)
@@ -40,30 +41,24 @@ class Sale(SaleBase, table=True):
     customer_id: uuid.UUID = Field(
         foreign_key="customer.id", nullable=False, ondelete="CASCADE"
     )
-    store_id: uuid.UUID = Field(
-        foreign_key="store.id", nullable=False, ondelete="CASCADE"
+    sale_id: uuid.UUID = Field(
+        foreign_key="sale.id", nullable=False, ondelete="CASCADE"
     )
 
-    owner: "User" = Relationship(back_populates="sales")
-    customer: "Customer" = Relationship(back_populates="sales")
-    store: "Store" = Relationship(back_populates="sales")
-    sale_items: list["SaleItem"] = Relationship(
-        back_populates="sale", cascade_delete=True
-    )
-    receivables: list["Receivable"] = Relationship(
-        back_populates="sale", cascade_delete=True
-    )
+    owner: "User" = Relationship(back_populates="payables")
+    customer: "Customer" = Relationship(back_populates="payables")
+    sale: "Sale" = Relationship(back_populates="payables")
 
 
-class SalePublic(SaleBase):
+class ReceivablePublic(ReceivableBase):
     id: uuid.UUID
     owner_id: uuid.UUID
     customer_id: uuid.UUID
-    store_id: uuid.UUID
+    sale_id: uuid.UUID
     date_created: datetime
     date_updated: datetime
 
 
-class SalesPublic(BaseModel):
-    data: list[SalePublic]
+class ReceivablesPublic(BaseModel):
+    data: list[ReceivablePublic]
     count: int

@@ -59,6 +59,13 @@ from app.models.main import (
     Token,
     TokenPayload,
 )
+from app.models.payable import (
+    Payable,
+    PayableCreate,
+    PayablePublic,
+    PayablesPublic,
+    PayableUpdate,
+)
 from app.models.payment import (
     Payment,
     PaymentCreate,
@@ -78,6 +85,13 @@ from app.models.purchase_item import (
     PurchaseItemPublic,
     PurchaseItemsPublic,
     PurchaseItemUpdate,
+)
+from app.models.receivable import (
+    Receivable,
+    ReceivableCreate,
+    ReceivablePublic,
+    ReceivablesPublic,
+    ReceivableUpdate,
 )
 from app.models.sale import (
     Sale,
@@ -216,6 +230,16 @@ __all__ = [
     "UserUpdate",
     "UserPublic",
     "UsersPublic",
+    "Payable",
+    "PayableCreate",
+    "PayableUpdate",
+    "PayablePublic",
+    "PayablesPublic",
+    "Receivable",
+    "ReceivableCreate",
+    "ReceivableUpdate",
+    "ReceivablePublic",
+    "ReceivablesPublic",
 ]
 
 # --- below same with above but auto-completion is not supported--- #

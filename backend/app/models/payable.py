@@ -8,29 +8,30 @@ from app.models import BaseModel
 from app.utils import utcnow
 
 if TYPE_CHECKING:
-    from app.models.payable import Payable
-    from app.models.purchase_item import PurchaseItem
-    from app.models.store import Store
+    from app.models.purchase import Purchase
     from app.models.supplier import Supplier
     from app.models.user import User
 
 
-class PurchaseBase(BaseModel):
-    date_purchase: datetime
+class PayableBase(BaseModel):
+    date_payable: datetime
     amount: float = Field(default=0, ge=0)
+    amount_paid: float = Field(default=0, ge=0)
+    status: str | None = Field(default=None, max_length=255)
     description: str | None = Field(default=None, max_length=255)
 
 
-class PurchaseCreate(PurchaseBase):
+class PayableCreate(PayableBase):
     pass
 
 
-class PurchaseUpdate(PurchaseBase):
-    date_purchase: datetime | None = Field(default=0)  # type: ignore
+class PayableUpdate(PayableBase):
+    date_payable: datetime | None = Field(default=0)  # type: ignore
     amount: float | None = Field(default=0, ge=0)  # type: ignore
+    amount_paid: float | None = Field(default=0, ge=0)  # type: ignore
 
 
-class Purchase(PurchaseBase, table=True):
+class Payable(PayableBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     date_created: datetime = Field(default_factory=utcnow)
     date_updated: datetime = Field(default_factory=utcnow)
@@ -40,30 +41,24 @@ class Purchase(PurchaseBase, table=True):
     supplier_id: uuid.UUID = Field(
         foreign_key="supplier.id", nullable=False, ondelete="CASCADE"
     )
-    store_id: uuid.UUID = Field(
-        foreign_key="store.id", nullable=False, ondelete="CASCADE"
+    purchase_id: uuid.UUID = Field(
+        foreign_key="purchase.id", nullable=False, ondelete="CASCADE"
     )
 
-    owner: "User" = Relationship(back_populates="purchases")
-    supplier: "Supplier" = Relationship(back_populates="purchases")
-    store: "Store" = Relationship(back_populates="purchases")
-    purchase_items: list["PurchaseItem"] = Relationship(
-        back_populates="purchase", cascade_delete=True
-    )
-    payables: list["Payable"] = Relationship(
-        back_populates="purchase", cascade_delete=True
-    )
+    owner: "User" = Relationship(back_populates="payables")
+    supplier: "Supplier" = Relationship(back_populates="payables")
+    purchase: "Purchase" = Relationship(back_populates="payables")
 
 
-class PurchasePublic(PurchaseBase):
+class PayablePublic(PayableBase):
     id: uuid.UUID
     owner_id: uuid.UUID
     supplier_id: uuid.UUID
-    store_id: uuid.UUID
+    purchase_id: uuid.UUID
     date_created: datetime
     date_updated: datetime
 
 
-class PurchasesPublic(BaseModel):
-    data: list[PurchasePublic]
+class PayablesPublic(BaseModel):
+    data: list[PayablePublic]
     count: int
