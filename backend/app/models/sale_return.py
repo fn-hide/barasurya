@@ -10,6 +10,7 @@ from app.utils import utcnow
 if TYPE_CHECKING:
     from app.models.customer import Customer
     from app.models.sale import Sale
+    from app.models.sale_return_item import SaleReturnItem
     from app.models.user import User
 
 
@@ -29,6 +30,8 @@ class SaleReturnUpdate(SaleReturnBase):
 
 
 class SaleReturn(SaleReturnBase, table=True):
+    __tablename__ = "sale_return"
+
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     date_created: datetime = Field(default_factory=utcnow)
     date_updated: datetime = Field(default_factory=utcnow)
@@ -45,6 +48,9 @@ class SaleReturn(SaleReturnBase, table=True):
     owner: "User" = Relationship(back_populates="sale_returns")
     customer: "Customer" = Relationship(back_populates="sale_returns")
     sale: "Sale" = Relationship(back_populates="sale_returns")
+    sale_return_items: list["SaleReturnItem"] = Relationship(
+        back_populates="sale_return", cascade_delete=True
+    )
 
 
 class SaleReturnPublic(SaleReturnBase):

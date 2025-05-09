@@ -9,6 +9,7 @@ from app.utils import utcnow
 
 if TYPE_CHECKING:
     from app.models.purchase import Purchase
+    from app.models.purchase_return_item import PurchaseReturnItem
     from app.models.supplier import Supplier
     from app.models.user import User
 
@@ -29,6 +30,8 @@ class PurchaseReturnUpdate(PurchaseReturnBase):
 
 
 class PurchaseReturn(PurchaseReturnBase, table=True):
+    __tablename__ = "purchase_return"
+
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     date_created: datetime = Field(default_factory=utcnow)
     date_updated: datetime = Field(default_factory=utcnow)
@@ -45,6 +48,9 @@ class PurchaseReturn(PurchaseReturnBase, table=True):
     owner: "User" = Relationship(back_populates="purchase_returns")
     supplier: "Supplier" = Relationship(back_populates="purchase_returns")
     purchase: "Purchase" = Relationship(back_populates="purchase_returns")
+    purchase_return_items: list["PurchaseReturnItem"] = Relationship(
+        back_populates="purchase_return", cascade_delete=True
+    )
 
 
 class PurchaseReturnPublic(PurchaseReturnBase):
