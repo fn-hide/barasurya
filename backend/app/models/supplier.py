@@ -34,8 +34,8 @@ class Supplier(SupplierBase, table=True):
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
 
-    owner: "User" = Relationship(back_populates="suppliers")  # type: ignore
-    purchases: list["Purchase"] = Relationship(  # type: ignore
+    owner: "User" = Relationship(back_populates="suppliers")
+    purchases: list["Purchase"] = Relationship(
         back_populates="supplier", cascade_delete=True
     )
 

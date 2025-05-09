@@ -39,8 +39,8 @@ class SaleItem(SaleItemBase, table=True):
         foreign_key="item.id", nullable=False, ondelete="CASCADE"
     )
 
-    sale: "Sale" = Relationship(back_populates="sale_items")  # type: ignore
-    item: "Item" = Relationship(back_populates="sale_items")  # type: ignore
+    sale: "Sale" = Relationship(back_populates="sale_items")
+    item: "Item" = Relationship(back_populates="sale_items")
 
 
 class SaleItemPublic(SaleItemBase):

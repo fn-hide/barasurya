@@ -43,10 +43,10 @@ class Sale(SaleBase, table=True):
         foreign_key="store.id", nullable=False, ondelete="CASCADE"
     )
 
-    owner: "User" = Relationship(back_populates="sales")  # type: ignore
-    customer: "Customer" = Relationship(back_populates="sales")  # type: ignore
-    store: "Store" = Relationship(back_populates="sales")  # type: ignore
-    sale_items: list["SaleItem"] = Relationship(  # type: ignore
+    owner: "User" = Relationship(back_populates="sales")
+    customer: "Customer" = Relationship(back_populates="sales")
+    store: "Store" = Relationship(back_populates="sales")
+    sale_items: list["SaleItem"] = Relationship(
         back_populates="sale", cascade_delete=True
     )
 

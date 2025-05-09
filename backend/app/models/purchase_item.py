@@ -39,8 +39,8 @@ class PurchaseItem(PurchaseItemBase, table=True):
         foreign_key="item.id", nullable=False, ondelete="CASCADE"
     )
 
-    purchase: "Purchase" = Relationship(back_populates="purchase_items")  # type: ignore
-    item: "Item" = Relationship(back_populates="purchase_items")  # type: ignore
+    purchase: "Purchase" = Relationship(back_populates="purchase_items")
+    item: "Item" = Relationship(back_populates="purchase_items")
 
 
 class PurchaseItemPublic(PurchaseItemBase):

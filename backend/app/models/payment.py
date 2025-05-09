@@ -46,8 +46,8 @@ class Payment(PaymentBase, table=True):
         foreign_key="account.id", nullable=False, ondelete="CASCADE"
     )
 
-    owner: "User" = Relationship(back_populates="payments")  # type: ignore
-    account: "Account" = Relationship(back_populates="payments")  # type: ignore
+    owner: "User" = Relationship(back_populates="payments")
+    account: "Account" = Relationship(back_populates="payments")
 
 
 class PaymentPublic(PaymentBase):

@@ -39,11 +39,9 @@ class Customer(CustomerBase, table=True):
         foreign_key="customer_type.id", nullable=False, ondelete="CASCADE"
     )
 
-    owner: "User" = Relationship(back_populates="customers")  # type: ignore
-    customer_type: "CustomerType" = Relationship(back_populates="customers")  # type: ignore
-    sales: list["Sale"] = Relationship(  # type: ignore
-        back_populates="customer", cascade_delete=True
-    )
+    owner: "User" = Relationship(back_populates="customers")
+    customer_type: "CustomerType" = Relationship(back_populates="customers")
+    sales: list["Sale"] = Relationship(back_populates="customer", cascade_delete=True)
 
 
 class CustomerPublic(CustomerBase):

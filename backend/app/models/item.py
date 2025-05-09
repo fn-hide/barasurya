@@ -55,11 +55,11 @@ class Item(ItemBase, table=True):
         foreign_key="item_unit.id", nullable=False, ondelete="CASCADE"
     )
 
-    owner: "User" = Relationship(back_populates="items")  # type: ignore
-    item_category: "ItemCategory" = Relationship(back_populates="items")  # type: ignore
-    item_unit: "ItemUnit" = Relationship(back_populates="items")  # type: ignore
-    purchase_items: list["PurchaseItem"] = Relationship(back_populates="item")  # type: ignore
-    sale_items: list["SaleItem"] = Relationship(back_populates="item")  # type: ignore
+    owner: "User" = Relationship(back_populates="items")
+    item_category: "ItemCategory" = Relationship(back_populates="items")
+    item_unit: "ItemUnit" = Relationship(back_populates="items")
+    purchase_items: list["PurchaseItem"] = Relationship(back_populates="item")
+    sale_items: list["SaleItem"] = Relationship(back_populates="item")
 
 
 # Properties to return via API, id is always required

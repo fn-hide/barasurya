@@ -65,36 +65,34 @@ class User(UserBase, table=True):
     date_created: datetime = Field(default_factory=utcnow)
     date_updated: datetime = Field(default_factory=utcnow)
 
-    items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)  # type: ignore
-    item_categories: list["ItemCategory"] = Relationship(  # type: ignore
+    items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
+    item_categories: list["ItemCategory"] = Relationship(
         back_populates="owner", cascade_delete=True
     )
-    item_units: list["ItemUnit"] = Relationship(  # type: ignore
+    item_units: list["ItemUnit"] = Relationship(
         back_populates="owner", cascade_delete=True
     )
-    stores: list["Store"] = Relationship(back_populates="owner", cascade_delete=True)  # type: ignore
-    suppliers: list["Supplier"] = Relationship(  # type: ignore
+    stores: list["Store"] = Relationship(back_populates="owner", cascade_delete=True)
+    suppliers: list["Supplier"] = Relationship(
         back_populates="owner", cascade_delete=True
     )
-    customer_types: list["CustomerType"] = Relationship(  # type: ignore
+    customer_types: list["CustomerType"] = Relationship(
         back_populates="owner", cascade_delete=True
     )
-    customers: list["Customer"] = Relationship(  # type: ignore
+    customers: list["Customer"] = Relationship(
         back_populates="owner", cascade_delete=True
     )
-    purchases: list["Purchase"] = Relationship(  # type: ignore
+    purchases: list["Purchase"] = Relationship(
         back_populates="owner", cascade_delete=True
     )
-    sales: list["Sale"] = Relationship(  # type: ignore
+    sales: list["Sale"] = Relationship(back_populates="owner", cascade_delete=True)
+    accounts: list["Account"] = Relationship(
         back_populates="owner", cascade_delete=True
     )
-    accounts: list["Account"] = Relationship(  # type: ignore
+    account_transactions: list["AccountTransaction"] = Relationship(
         back_populates="owner", cascade_delete=True
     )
-    account_transactions: list["AccountTransaction"] = Relationship(  # type: ignore
-        back_populates="owner", cascade_delete=True
-    )
-    payments: list["Payment"] = Relationship(  # type: ignore
+    payments: list["Payment"] = Relationship(
         back_populates="owner", cascade_delete=True
     )
 

@@ -35,8 +35,8 @@ class ItemUnit(ItemUnitBase, table=True):
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
 
-    owner: "User" = Relationship(back_populates="item_units")  # type: ignore
-    items: list["Item"] = Relationship(back_populates="item_unit", cascade_delete=True)  # type: ignore
+    owner: "User" = Relationship(back_populates="item_units")
+    items: list["Item"] = Relationship(back_populates="item_unit", cascade_delete=True)
 
 
 class ItemUnitPublic(ItemUnitBase):

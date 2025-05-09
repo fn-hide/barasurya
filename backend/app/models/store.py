@@ -36,13 +36,11 @@ class Store(StoreBase, table=True):
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
 
-    owner: "User" = Relationship(back_populates="stores")  # type: ignore
-    purchases: list["Purchase"] = Relationship(  # type: ignore
+    owner: "User" = Relationship(back_populates="stores")
+    purchases: list["Purchase"] = Relationship(
         back_populates="store", cascade_delete=True
     )
-    sales: list["Sale"] = Relationship(  # type: ignore
-        back_populates="store", cascade_delete=True
-    )
+    sales: list["Sale"] = Relationship(back_populates="store", cascade_delete=True)
 
 
 class StorePublic(StoreBase):
