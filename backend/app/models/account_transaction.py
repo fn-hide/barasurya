@@ -52,8 +52,8 @@ class AccountTransaction(AccountTransactionBase, table=True):
         foreign_key="account.id", nullable=False, ondelete="CASCADE"
     )
 
-    owner: "User" = Relationship(back_populates="account_transactions")  # type: ignore
-    account: "Account" = Relationship(back_populates="account_transactions")  # type: ignore
+    owner: "User" = Relationship(back_populates="account_transactions")
+    account: "Account" = Relationship(back_populates="account_transactions")
 
 
 class AccountTransactionPublic(AccountTransactionBase):

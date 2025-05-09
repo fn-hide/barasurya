@@ -21,7 +21,7 @@ class BaseModel(SQLModel):
 
     model_config = ConfigDict(
         protected_namespaces=(),
-    )  # type: ignore
+    )
 
 
 BaseModel.metadata.naming_convention = convention

@@ -16,6 +16,7 @@ if TYPE_CHECKING:
     from app.models.item import Item
     from app.models.item_category import ItemCategory
     from app.models.item_unit import ItemUnit
+    from app.models.payment import Payment
     from app.models.purchase import Purchase
     from app.models.sale import Sale
     from app.models.store import Store
@@ -91,6 +92,9 @@ class User(UserBase, table=True):
         back_populates="owner", cascade_delete=True
     )
     account_transactions: list["AccountTransaction"] = Relationship(  # type: ignore
+        back_populates="owner", cascade_delete=True
+    )
+    payments: list["Payment"] = Relationship(  # type: ignore
         back_populates="owner", cascade_delete=True
     )
 

@@ -47,7 +47,7 @@ class Payment(PaymentBase, table=True):
     )
 
     owner: "User" = Relationship(back_populates="payments")  # type: ignore
-    supplier: "Account" = Relationship(back_populates="payments")  # type: ignore
+    account: "Account" = Relationship(back_populates="payments")  # type: ignore
 
 
 class PaymentPublic(PaymentBase):

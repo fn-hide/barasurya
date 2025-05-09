@@ -9,6 +9,7 @@ from app.utils import utcnow
 
 if TYPE_CHECKING:
     from app.models.account_transaction import AccountTransaction
+    from app.models.payment import Payment
     from app.models.user import User
 
 
@@ -36,10 +37,11 @@ class Account(AccountBase, table=True):
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
 
-    owner: "User" = Relationship(back_populates="accounts")  # type: ignore
+    owner: "User" = Relationship(back_populates="accounts")
     account_transactions: list["AccountTransaction"] = Relationship(
         back_populates="account"
-    )  # type: ignore
+    )
+    payments: list["Payment"] = Relationship(back_populates="account")
 
 
 class AccountPublic(AccountBase):
