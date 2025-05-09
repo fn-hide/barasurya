@@ -131,6 +131,8 @@ When the tests are run, a file `htmlcov/index.html` is generated, you can open i
 
 ## Migrations
 
+ERD diagram is available on [Google Drive](https://drive.google.com/file/d/1Tv58WCXbaOQVgeL4qk_bbFhhPFNYRcsV/view?usp=sharing) by [draw.io](https://app.diagrams.net/)
+
 As during local development your app directory is mounted as a volume inside the container, you can also run the migrations with `alembic` commands inside the container and the migration code will be in your app directory (instead of being only inside the container). So you can add it to your git repository.
 
 Make sure you create a "revision" of your models and that you "upgrade" your database with that revision every time you change them. As this is what will update the tables in your database. Otherwise, your application will have errors.
