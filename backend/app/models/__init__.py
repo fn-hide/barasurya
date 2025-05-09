@@ -1,3 +1,10 @@
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.models.base import BaseModel, BaseModelUpdate, SQLModel
+else:
+    from app.models.base import BaseModel, BaseModelUpdate, SQLModel  # type: ignore
+
 from app.models.account import (
     Account,
     AccountCreate,
@@ -10,11 +17,6 @@ from app.models.account_transaction import (
     AccountTransactionCreate,
     AccountTransactionPublic,
     AccountTransactionsPublic,
-)
-from app.models.base import (
-    BaseModel,
-    BaseModelUpdate,
-    SQLModel,
 )
 from app.models.customer import (
     Customer,
