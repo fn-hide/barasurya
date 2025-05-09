@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from app.models.purchase_item import PurchaseItem
     from app.models.sale_item import SaleItem
     from app.models.stock_adjustment import StockAdjustment
+    from app.models.stock_transfer import StockTransfer
     from app.models.user import User
 
 
@@ -62,6 +63,7 @@ class Item(ItemBase, table=True):
     purchase_items: list["PurchaseItem"] = Relationship(back_populates="item")
     sale_items: list["SaleItem"] = Relationship(back_populates="item")
     stock_adjustments: list["StockAdjustment"] = Relationship(back_populates="item")
+    stock_transfers: list["StockTransfer"] = Relationship(back_populates="item")
 
 
 # Properties to return via API, id is always required

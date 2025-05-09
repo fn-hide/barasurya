@@ -43,10 +43,14 @@ class Store(StoreBase, table=True):
     )
     sales: list["Sale"] = Relationship(back_populates="store", cascade_delete=True)
     src_stock_transfers: list["StockTransfer"] = Relationship(
-        back_populates="src_store", cascade_delete=True
+        back_populates="src_store",
+        cascade_delete=True,
+        sa_relationship_kwargs={"foreign_keys": "[StockTransfer.src_store_id]"},
     )
     dst_stock_transfers: list["StockTransfer"] = Relationship(
-        back_populates="dst_store", cascade_delete=True
+        back_populates="dst_store",
+        cascade_delete=True,
+        sa_relationship_kwargs={"foreign_keys": "[StockTransfer.dst_store_id]"},
     )
 
 

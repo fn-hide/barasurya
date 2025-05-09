@@ -45,9 +45,9 @@ class Receivable(ReceivableBase, table=True):
         foreign_key="sale.id", nullable=False, ondelete="CASCADE"
     )
 
-    owner: "User" = Relationship(back_populates="payables")
-    customer: "Customer" = Relationship(back_populates="payables")
-    sale: "Sale" = Relationship(back_populates="payables")
+    owner: "User" = Relationship(back_populates="receivables")
+    customer: "Customer" = Relationship(back_populates="receivables")
+    sale: "Sale" = Relationship(back_populates="receivables")
 
 
 class ReceivablePublic(ReceivableBase):

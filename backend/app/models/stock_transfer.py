@@ -44,8 +44,14 @@ class StockTransfer(StockTransferBase, table=True):
 
     owner: "User" = Relationship(back_populates="stock_transfers")
     item: "Item" = Relationship(back_populates="stock_transfers")
-    src_store: "Store" = Relationship(back_populates="src_stock_transfers")
-    dst_store: "Store" = Relationship(back_populates="dst_stock_transfers")
+    src_store: "Store" = Relationship(
+        back_populates="src_stock_transfers",
+        sa_relationship_kwargs={"foreign_keys": "StockTransfer.src_store_id"},
+    )
+    dst_store: "Store" = Relationship(
+        back_populates="dst_stock_transfers",
+        sa_relationship_kwargs={"foreign_keys": "StockTransfer.dst_store_id"},
+    )
 
 
 class StockTransferPublic(StockTransferBase):
