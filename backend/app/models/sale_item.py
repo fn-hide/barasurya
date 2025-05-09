@@ -10,7 +10,6 @@ from app.utils import utcnow
 if TYPE_CHECKING:
     from app.models.item import Item
     from app.models.sale import Sale
-    from app.models.user import User
 
 
 class SaleItemBase(BaseModel):
@@ -33,9 +32,6 @@ class SaleItem(SaleItemBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     date_created: datetime = Field(default_factory=utcnow)
     date_updated: datetime = Field(default_factory=utcnow)
-    owner_id: uuid.UUID = Field(
-        foreign_key="user.id", nullable=False, ondelete="CASCADE"
-    )
     sale_id: uuid.UUID = Field(
         foreign_key="sale.id", nullable=False, ondelete="CASCADE"
     )
@@ -43,7 +39,6 @@ class SaleItem(SaleItemBase, table=True):
         foreign_key="item.id", nullable=False, ondelete="CASCADE"
     )
 
-    owner: "User" = Relationship(back_populates="sale_items")  # type: ignore
     sale: "Sale" = Relationship(back_populates="sale_items")  # type: ignore
     item: "Item" = Relationship(back_populates="sale_items")  # type: ignore
 

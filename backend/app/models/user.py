@@ -17,9 +17,7 @@ if TYPE_CHECKING:
     from app.models.item_category import ItemCategory
     from app.models.item_unit import ItemUnit
     from app.models.purchase import Purchase
-    from app.models.purchase_item import PurchaseItem
     from app.models.sale import Sale
-    from app.models.sale_item import SaleItem
     from app.models.store import Store
     from app.models.supplier import Supplier
 
@@ -86,13 +84,7 @@ class User(UserBase, table=True):
     purchases: list["Purchase"] = Relationship(  # type: ignore
         back_populates="owner", cascade_delete=True
     )
-    purchase_items: list["PurchaseItem"] = Relationship(  # type: ignore
-        back_populates="owner", cascade_delete=True
-    )
     sales: list["Sale"] = Relationship(  # type: ignore
-        back_populates="owner", cascade_delete=True
-    )
-    sale_items: list["SaleItem"] = Relationship(  # type: ignore
         back_populates="owner", cascade_delete=True
     )
     accounts: list["Account"] = Relationship(  # type: ignore
