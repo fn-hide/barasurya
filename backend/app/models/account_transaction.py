@@ -1,6 +1,5 @@
 import uuid
 from datetime import datetime
-from enum import Enum
 from typing import TYPE_CHECKING
 
 from sqlmodel import Field, Relationship
@@ -13,25 +12,11 @@ if TYPE_CHECKING:
     from app.models.user import User
 
 
-class AccountTransactionType(str, Enum):
-    income = "income"
-    expense = "expense"
-    transfer_in = "transfer_in"
-    transfer_out = "transfer_out"
-
-
-class ReferenceName(str, Enum):
-    sale = "sale"
-    purchase = "purchase"
-    payable = "payable"
-    receivable = "receivable"
-
-
 class AccountTransactionBase(BaseModel):
-    type: AccountTransactionType
+    type: str
     amount: float = Field(default=0, ge=0)
     # TODO: consider to add return transaction
-    reference_name: ReferenceName
+    reference_name: str
     reference_id: uuid.UUID
     description: str | None = Field(default=None, max_length=255)
 

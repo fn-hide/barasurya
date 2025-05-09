@@ -93,6 +93,12 @@ from app.models.sale_item import (
     SaleItemsPublic,
     SaleItemUpdate,
 )
+from app.models.stock_adjustment import (
+    StockAdjustment,
+    StockAdjustmentCreate,
+    StockAdjustmentPublic,
+    StockAdjustmentsPublic,
+)
 from app.models.store import (
     Store,
     StoreCreate,
@@ -181,6 +187,10 @@ __all__ = [
     "SaleUpdate",
     "SalePublic",
     "SalesPublic",
+    "StockAdjustment",
+    "StockAdjustmentCreate",
+    "StockAdjustmentPublic",
+    "StockAdjustmentsPublic",
     "Store",
     "StoreCreate",
     "StoreUpdate",

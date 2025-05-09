@@ -1,6 +1,5 @@
 import uuid
 from datetime import datetime
-from enum import Enum
 from typing import TYPE_CHECKING
 
 from sqlmodel import Field, Relationship
@@ -13,15 +12,10 @@ if TYPE_CHECKING:
     from app.models.user import User
 
 
-class PaymentMethod(str, Enum):
-    cash = "cash"
-    transfer = "transfer"
-
-
 class PaymentBase(BaseModel):
     date_payment: datetime
     amount: float = Field(default=0, ge=0)
-    method: PaymentMethod
+    method: str
     reference_id: str | None = Field(default=None, max_length=255)
     description: str | None = Field(default=None, max_length=255)
     transaction_type: str | None = Field(default=None, max_length=255)
