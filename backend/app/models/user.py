@@ -18,15 +18,18 @@ if TYPE_CHECKING:
     from app.models.item_unit import ItemUnit
     from app.models.payable import Payable
     from app.models.payment import Payment
+    from app.models.permission import Permission
     from app.models.purchase import Purchase
     from app.models.purchase_return import PurchaseReturn
     from app.models.receivable import Receivable
+    from app.models.role import Role
     from app.models.sale import Sale
     from app.models.sale_return import SaleReturn
     from app.models.stock_adjustment import StockAdjustment
     from app.models.stock_transfer import StockTransfer
     from app.models.store import Store
     from app.models.supplier import Supplier
+    from app.models.user_role import UserRole
 
 
 # Shared properties
@@ -118,6 +121,21 @@ class User(UserBase, table=True):
     )
     purchase_returns: list["PurchaseReturn"] = Relationship(
         back_populates="owner", cascade_delete=True
+    )
+    roles_owner: list["Role"] = Relationship(
+        back_populates="owner", cascade_delete=True
+    )
+    roles_editor: list["Role"] = Relationship(
+        back_populates="editor", cascade_delete=True
+    )
+    permissions_owner: list["Permission"] = Relationship(
+        back_populates="owner", cascade_delete=True
+    )
+    permissions_editor: list["Permission"] = Relationship(
+        back_populates="editor", cascade_delete=True
+    )
+    user_role: list["UserRole"] = Relationship(
+        back_populates="user", cascade_delete=True
     )
 
 

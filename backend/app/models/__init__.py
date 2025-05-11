@@ -72,6 +72,13 @@ from app.models.payment import (
     PaymentPublic,
     PaymentsPublic,
 )
+from app.models.permission import (
+    Permission,
+    PermissionCreate,
+    PermissionPublic,
+    PermissionsPublic,
+    PermissionUpdate,
+)
 from app.models.purchase import (
     Purchase,
     PurchaseCreate,
@@ -106,6 +113,20 @@ from app.models.receivable import (
     ReceivablePublic,
     ReceivablesPublic,
     ReceivableUpdate,
+)
+from app.models.role import (
+    Role,
+    RoleCreate,
+    RolePublic,
+    RolesPublic,
+    RoleUpdate,
+)
+from app.models.role_permission import (
+    RolePermission,
+    RolePermissionCreate,
+    RolePermissionPublic,
+    RolePermissionsPublic,
+    RolePermissionUpdate,
 )
 from app.models.sale import (
     Sale,
@@ -167,6 +188,13 @@ from app.models.user import (
     UserPublic,
     UsersPublic,
     UserUpdate,
+)
+from app.models.user_role import (
+    UserRole,
+    UserRoleCreate,
+    UserRolePublic,
+    UserRolesPublic,
+    UserRoleUpdate,
 )
 
 __all__ = [
@@ -230,6 +258,26 @@ __all__ = [
     "PurchaseReturnUpdate",
     "PurchaseReturnPublic",
     "PurchaseReturnsPublic",
+    "Role",
+    "RoleCreate",
+    "RoleUpdate",
+    "RolePublic",
+    "RolesPublic",
+    "Permission",
+    "PermissionCreate",
+    "PermissionUpdate",
+    "PermissionPublic",
+    "PermissionsPublic",
+    "UserRole",
+    "UserRoleCreate",
+    "UserRoleUpdate",
+    "UserRolePublic",
+    "UserRolesPublic",
+    "RolePermission",
+    "RolePermissionCreate",
+    "RolePermissionUpdate",
+    "RolePermissionPublic",
+    "RolePermissionsPublic",
     "SaleReturn",
     "SaleReturnCreate",
     "SaleReturnUpdate",
