@@ -41,8 +41,14 @@ class Role(RoleBase, table=True):
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
 
-    owner: "User" = Relationship(back_populates="roles_owner")
-    editor: "User" = Relationship(back_populates="roles_editor")
+    owner: "User" = Relationship(
+        back_populates="roles_owner",
+        sa_relationship_kwargs={"foreign_keys": "Role.owner_id"},
+    )
+    editor: "User" = Relationship(
+        back_populates="roles_editor",
+        sa_relationship_kwargs={"foreign_keys": "Role.editor_id"},
+    )
     user_role: "UserRole" = Relationship(back_populates="role")
     role_permission: "RolePermission" = Relationship(back_populates="role")
 

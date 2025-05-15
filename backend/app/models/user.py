@@ -123,16 +123,24 @@ class User(UserBase, table=True):
         back_populates="owner", cascade_delete=True
     )
     roles_owner: list["Role"] = Relationship(
-        back_populates="owner", cascade_delete=True
+        back_populates="owner",
+        cascade_delete=True,
+        sa_relationship_kwargs={"foreign_keys": "Role.owner_id"},
     )
     roles_editor: list["Role"] = Relationship(
-        back_populates="editor", cascade_delete=True
+        back_populates="editor",
+        cascade_delete=True,
+        sa_relationship_kwargs={"foreign_keys": "Role.editor_id"},
     )
     permissions_owner: list["Permission"] = Relationship(
-        back_populates="owner", cascade_delete=True
+        back_populates="owner",
+        cascade_delete=True,
+        sa_relationship_kwargs={"foreign_keys": "Permission.owner_id"},
     )
     permissions_editor: list["Permission"] = Relationship(
-        back_populates="editor", cascade_delete=True
+        back_populates="editor",
+        cascade_delete=True,
+        sa_relationship_kwargs={"foreign_keys": "Permission.editor_id"},
     )
     user_role: list["UserRole"] = Relationship(
         back_populates="user", cascade_delete=True

@@ -40,8 +40,14 @@ class Permission(PermissionBase, table=True):
         foreign_key="user.id", nullable=False, ondelete="CASCADE"
     )
 
-    owner: "User" = Relationship(back_populates="permissions_owner")
-    editor: "User" = Relationship(back_populates="permissions_editor")
+    owner: "User" = Relationship(
+        back_populates="permissions_owner",
+        sa_relationship_kwargs={"foreign_keys": "Permission.owner_id"},
+    )
+    editor: "User" = Relationship(
+        back_populates="permissions_editor",
+        sa_relationship_kwargs={"foreign_keys": "Permission.editor_id"},
+    )
     role_permission: "RolePermission" = Relationship(back_populates="permission")
 
 
