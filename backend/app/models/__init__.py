@@ -55,7 +55,6 @@ from app.models.item_unit import (
 )
 from app.models.main import (
     Message,
-    NewPassword,
     Token,
     TokenPayload,
 )
@@ -183,11 +182,15 @@ from app.models.supplier import (
     SupplierUpdate,
 )
 from app.models.user import (
+    NewPassword,
+    UpdatePassword,
     User,
     UserCreate,
     UserPublic,
+    UserRegister,
     UsersPublic,
     UserUpdate,
+    UserUpdateMe,
 )
 from app.models.user_role import (
     UserRole,
@@ -326,6 +329,9 @@ __all__ = [
     "UserUpdate",
     "UserPublic",
     "UsersPublic",
+    "UpdatePassword",
+    "UserRegister",
+    "UserUpdateMe",
     "Payable",
     "PayableCreate",
     "PayableUpdate",
