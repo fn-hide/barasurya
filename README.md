@@ -1,5 +1,9 @@
 # Barasurya
 
+<a href="https://github.com/fn-hide/barasurya/actions?query=workflow%3ATest" target="_blank"><img src="https://github.com/fn-hide/barasurya/workflows/Test/badge.svg" alt="Test"></a>
+<a href="https://coverage-badge.samuelcolvin.workers.dev/redirect/fn-hide/barasurya" target="_blank"><img src="https://coverage-badge.samuelcolvin.workers.dev/fn-hide/barasurya.svg" alt="Coverage"></a>
+
+
 <div align="center">
   <p>
     <a href="https://github.com/fn-hide/barasurya" target="_blank">
