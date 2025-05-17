@@ -1,5 +1,9 @@
 # Barasurya Project - Backend
 
+## TODOs
+
+- [ ] 🎨 Add separation of concerns by splitting models (database) and schemas (api contract)
+
 ## Requirements
 
 * [Docker](https://www.docker.com/).
