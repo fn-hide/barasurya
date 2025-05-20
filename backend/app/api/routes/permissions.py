@@ -1,12 +1,10 @@
 import uuid
 from typing import Any
 
-from fastapi import APIRouter, HTTPException
-from sqlmodel import func, select
+from fastapi import APIRouter, Depends, HTTPException
 
-from app.api.deps import CurrentUser, SessionDep
+from app.api.deps import CurrentUser, SessionDep, get_current_active_superuser
 from app.models import (
-    BaseModelUpdate,
     Message,
     Permission,
     PermissionCreate,
@@ -14,57 +12,49 @@ from app.models import (
     PermissionsPublic,
     PermissionUpdate,
 )
+from app.repositories import RPermission
+from app.services import SPermission
+from app.utils import utcnow
 
 router = APIRouter(prefix="/permissions", tags=["permissions"])
 
 
-@router.get("/", response_model=PermissionsPublic)
-def read_permissions(
-    session: SessionDep, current_user: CurrentUser, skip: int = 0, limit: int = 100
-) -> Any:
-    """
-    Retrieve permissions.
-    """
-
-    if current_user.is_superuser:
-        count_statement = select(func.count()).select_from(Permission)
-        count = session.exec(count_statement).one()
-        statement = select(Permission).offset(skip).limit(limit)
-        permissions = session.exec(statement).all()
-    else:
-        count_statement = (
-            select(func.count())
-            .select_from(Permission)
-            .where(Permission.owner_id == current_user.id)
-        )
-        count = session.exec(count_statement).one()
-        statement = (
-            select(Permission)
-            .where(Permission.owner_id == current_user.id)
-            .offset(skip)
-            .limit(limit)
-        )
-        permissions = session.exec(statement).all()
-
-    return PermissionsPublic(data=permissions, count=count)
-
-
-@router.get("/{id}", response_model=PermissionPublic)
-def read_permission(
-    session: SessionDep, current_user: CurrentUser, id: uuid.UUID
-) -> Any:
+@router.get(
+    "/{id}",
+    dependencies=[Depends(get_current_active_superuser)],
+    response_model=PermissionPublic,
+)
+def read_permission(session: SessionDep, id: uuid.UUID) -> Any:
     """
     Get permission by ID.
     """
-    permission = session.get(Permission, id)
-    if not permission:
-        raise HTTPException(status_code=404, detail="permission not found")
-    if not current_user.is_superuser and (permission.owner_id != current_user.id):
-        raise HTTPException(status_code=400, detail="Not enough permissions")
-    return permission
+    repo = RPermission(session)
+    service = SPermission(repo)
+    try:
+        return service.read_permission(id)
+    except ValueError as e:
+        return HTTPException(status_code=404, detail=str(e))
 
 
-@router.post("/", response_model=PermissionPublic)
+@router.get(
+    "/",
+    dependencies=[Depends(get_current_active_superuser)],
+    response_model=PermissionsPublic,
+)
+def read_permissions(session: SessionDep, skip: int = 0, limit: int = 10) -> Any:
+    """
+    Retrieve permissions.
+    """
+    repo = RPermission(session)
+    service = SPermission(repo)
+    return service.read_permissions(skip, limit)
+
+
+@router.post(
+    "/",
+    dependencies=[Depends(get_current_active_superuser)],
+    response_model=PermissionPublic,
+)
 def create_permission(
     *, session: SessionDep, current_user: CurrentUser, permission_in: PermissionCreate
 ) -> Any:
@@ -74,49 +64,46 @@ def create_permission(
     permission = Permission.model_validate(
         permission_in, update={"owner_id": current_user.id}
     )
-    session.add(permission)
-    session.commit()
-    session.refresh(permission)
-    return permission
+    repo = RPermission(session)
+    service = SPermission(repo)
+    return service.create_permission(permission)
 
 
-@router.put("/{id}", response_model=PermissionPublic)
+@router.put(
+    "/{id}",
+    dependencies=[Depends(get_current_active_superuser)],
+    response_model=PermissionPublic,
+)
 def update_permission(
     *,
     session: SessionDep,
-    current_user: CurrentUser,
     id: uuid.UUID,
     permission_in: PermissionUpdate,
 ) -> Any:
     """
     Update an permission.
     """
-    permission = session.get(Permission, id)
-    if not permission:
-        raise HTTPException(status_code=404, detail="permission not found")
-    if not current_user.is_superuser and (permission.owner_id != current_user.id):
-        raise HTTPException(status_code=400, detail="Not enough permissions")
+    repo = RPermission(session)
+    service = SPermission(repo)
+    try:
+        permission = service.read_permission(id)
+    except ValueError as e:
+        return HTTPException(status_code=404, detail=str(e))
     update_dict = permission_in.model_dump(exclude_unset=True)
-    update_dict.update(BaseModelUpdate().model_dump())
+    update_dict.date_updated = str(utcnow())
     permission.sqlmodel_update(update_dict)
-    session.add(permission)
-    session.commit()
-    session.refresh(permission)
-    return permission
+    return service.update_permission(permission, update_dict)
 
 
-@router.delete("/{id}")
-def delete_permission(
-    session: SessionDep, current_user: CurrentUser, id: uuid.UUID
-) -> Message:
+@router.delete("/{id}", dependencies=[Depends(get_current_active_superuser)])
+def delete_permission(session: SessionDep, id: uuid.UUID) -> Message:
     """
     Delete an permission.
     """
-    permission = session.get(Permission, id)
-    if not permission:
-        raise HTTPException(status_code=404, detail="permission not found")
-    if not current_user.is_superuser and (permission.owner_id != current_user.id):
-        raise HTTPException(status_code=400, detail="Not enough permissions")
-    session.delete(permission)
-    session.commit()
-    return Message(message="permission deleted successfully")
+    repo = RPermission(session)
+    service = SPermission(repo)
+    try:
+        permission = service.read_permission(id)
+    except ValueError as e:
+        return HTTPException(status_code=404, detail=str(e))
+    return service.delete_permission(permission)
