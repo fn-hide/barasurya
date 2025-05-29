@@ -11,6 +11,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Select,
 } from "@chakra-ui/react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { type SubmitHandler, useForm } from "react-hook-form"
@@ -61,6 +62,33 @@ const AddItem = ({ isOpen, onClose }: AddItemProps) => {
     mutation.mutate(data)
   }
 
+  const frameworks = [
+    {
+      id: "uuid1",
+      label: "Basic Plan",
+      value: "basic",
+      description: "$9/month - Perfect for small projects",
+    },
+    {
+      id: "uuid2",
+      label: "Pro Plan",
+      value: "pro",
+      description: "$29/month - Advanced features",
+    },
+    {
+      id: "uuid3",
+      label: "Business Plan",
+      value: "business",
+      description: "$99/month - Enterprise-grade solutions",
+    },
+    {
+      id: "uuid4",
+      label: "Enterprise Plan",
+      value: "enterprise",
+      description: "Custom pricing - Tailored solutions",
+    },
+  ]
+
   return (
     <>
       <Modal
@@ -86,6 +114,42 @@ const AddItem = ({ isOpen, onClose }: AddItemProps) => {
               />
               {errors.title && (
                 <FormErrorMessage>{errors.title.message}</FormErrorMessage>
+              )}
+            </FormControl>
+            <FormControl isRequired isInvalid={!!errors.item_category_id} mt={4}>
+              <FormLabel htmlFor="item_category_id">Category</FormLabel>
+              <Select
+                id="item_category_id"
+                {...register("item_category_id", {
+                  required: "Category of item is required."
+                })}
+                placeholder="Select the category of item">
+                {frameworks.map((plan) => (
+                  <option key={plan.value} value={plan.value}>
+                    {plan.label}
+                  </option>
+                ))}
+              </Select>
+              {errors.item_category_id && (
+                <FormErrorMessage>{errors.item_category_id.message}</FormErrorMessage>
+              )}
+            </FormControl>
+            <FormControl isRequired isInvalid={!!errors.item_unit_id} mt={4}>
+              <FormLabel htmlFor="item_unit_id">Unit</FormLabel>
+              <Select
+                id="item_unit_id"
+                {...register("item_unit_id", {
+                  required: "Unit of item is required."
+                })}
+                placeholder="Select the unit of item">
+                {frameworks.map((plan) => (
+                  <option key={plan.value} value={plan.value}>
+                    {plan.label}
+                  </option>
+                ))}
+              </Select>
+              {errors.item_unit_id && (
+                <FormErrorMessage>{errors.item_unit_id.message}</FormErrorMessage>
               )}
             </FormControl>
             <FormControl mt={4}>

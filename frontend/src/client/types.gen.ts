@@ -15,6 +15,8 @@ export type HTTPValidationError = {
 
 export type ItemCreate = {
   title: string
+  item_category_id?: string
+  item_unit_id?: string
   description?: string | null
 }
 
