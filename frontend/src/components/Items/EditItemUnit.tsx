@@ -15,38 +15,40 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
-import { type ApiError, type ItemCategoryCreate, ItemCategoriesService } from "../../client"
+import {
+  type ApiError,
+  type ItemUnitPublic,
+  type ItemUnitUpdate,
+  ItemUnitsService,
+} from "../../client"
 import useCustomToast from "../../hooks/useCustomToast"
 import { handleError } from "../../utils"
 
-interface AddItemCategoryProps {
+interface EditItemUnitProps {
+  item: ItemUnitPublic
   isOpen: boolean
   onClose: () => void
 }
 
-const AddItemCategory = ({ isOpen, onClose }: AddItemCategoryProps) => {
+const EditItemUnit = ({ item, isOpen, onClose }: EditItemUnitProps) => {
   const queryClient = useQueryClient()
   const showToast = useCustomToast()
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
-  } = useForm<ItemCategoryCreate>({
+    formState: { isSubmitting, errors, isDirty },
+  } = useForm<ItemUnitUpdate>({
     mode: "onBlur",
     criteriaMode: "all",
-    defaultValues: {
-      name: "",
-      description: "",
-    },
+    defaultValues: item,
   })
 
   const mutation = useMutation({
-    mutationFn: (data: ItemCategoryCreate) =>
-      ItemCategoriesService.createItemCategory({ requestBody: data }),
+    mutationFn: (data: ItemUnitUpdate) =>
+      ItemUnitsService.updateItemUnit({ id: item.id, requestBody: data }),
     onSuccess: () => {
-      showToast("Success!", "ItemCategories created successfully.", "success")
-      reset()
+      showToast("Success!", "ItemUnit updated successfully.", "success")
       onClose()
     },
     onError: (err: ApiError) => {
@@ -57,8 +59,13 @@ const AddItemCategory = ({ isOpen, onClose }: AddItemCategoryProps) => {
     },
   })
 
-  const onSubmit: SubmitHandler<ItemCategoryCreate> = (data) => {
+  const onSubmit: SubmitHandler<ItemUnitUpdate> = async (data) => {
     mutation.mutate(data)
+  }
+
+  const onCancel = () => {
+    reset()
+    onClose()
   }
 
   return (
@@ -71,17 +78,16 @@ const AddItemCategory = ({ isOpen, onClose }: AddItemCategoryProps) => {
       >
         <ModalOverlay />
         <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Add ItemCategories</ModalHeader>
+          <ModalHeader>Edit ItemUnit</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl isRequired isInvalid={!!errors.name}>
+            <FormControl isInvalid={!!errors.name}>
               <FormLabel htmlFor="name">Name</FormLabel>
               <Input
                 id="name"
                 {...register("name", {
-                  required: "Name is required.",
+                  required: "Name is required",
                 })}
-                placeholder="Name"
                 type="text"
               />
               {errors.name && (
@@ -98,12 +104,16 @@ const AddItemCategory = ({ isOpen, onClose }: AddItemCategoryProps) => {
               />
             </FormControl>
           </ModalBody>
-
           <ModalFooter gap={3}>
-            <Button variant="primary" type="submit" isLoading={isSubmitting}>
+            <Button
+              variant="primary"
+              type="submit"
+              isLoading={isSubmitting}
+              isDisabled={!isDirty}
+            >
               Save
             </Button>
-            <Button onClick={onClose}>Cancel</Button>
+            <Button onClick={onCancel}>Cancel</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -111,4 +121,4 @@ const AddItemCategory = ({ isOpen, onClose }: AddItemCategoryProps) => {
   )
 }
 
-export default AddItemCategory
+export default EditItemUnit

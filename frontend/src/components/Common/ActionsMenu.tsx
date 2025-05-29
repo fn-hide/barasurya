@@ -13,6 +13,7 @@ import type { ItemCategoryPublic, ItemPublic, UserPublic } from "../../client"
 import EditUser from "../Admin/EditUser"
 import EditItem from "../Items/EditItem"
 import EditItemCategory from "../Items/EditItemCategory"
+import EditItemUnit from "../Items/EditItemUnit"
 import Delete from "./DeleteAlert"
 
 interface ActionsMenuProps {
@@ -42,6 +43,13 @@ const ActionsMenu = ({ type, value, disabled }: ActionsMenuProps) => {
     ItemCategory: (
       <EditItemCategory
         item={value as ItemCategoryPublic}
+        isOpen={editUserModal.isOpen}
+        onClose={editUserModal.onClose}
+      />
+    ),
+    ItemUnit: (
+      <EditItemUnit
+        item={value as ItemUnitPublic}
         isOpen={editUserModal.isOpen}
         onClose={editUserModal.onClose}
       />

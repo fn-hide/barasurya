@@ -15,16 +15,16 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
-import { type ApiError, type ItemCategoryCreate, ItemCategoriesService } from "../../client"
+import { type ApiError, type ItemUnitCreate, ItemUnitsService } from "../../client"
 import useCustomToast from "../../hooks/useCustomToast"
 import { handleError } from "../../utils"
 
-interface AddItemCategoryProps {
+interface AddItemUnitProps {
   isOpen: boolean
   onClose: () => void
 }
 
-const AddItemCategory = ({ isOpen, onClose }: AddItemCategoryProps) => {
+const AddItemUnit = ({ isOpen, onClose }: AddItemUnitProps) => {
   const queryClient = useQueryClient()
   const showToast = useCustomToast()
   const {
@@ -32,7 +32,7 @@ const AddItemCategory = ({ isOpen, onClose }: AddItemCategoryProps) => {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<ItemCategoryCreate>({
+  } = useForm<ItemUnitCreate>({
     mode: "onBlur",
     criteriaMode: "all",
     defaultValues: {
@@ -42,10 +42,10 @@ const AddItemCategory = ({ isOpen, onClose }: AddItemCategoryProps) => {
   })
 
   const mutation = useMutation({
-    mutationFn: (data: ItemCategoryCreate) =>
-      ItemCategoriesService.createItemCategory({ requestBody: data }),
+    mutationFn: (data: ItemUnitCreate) =>
+      ItemUnitsService.createItemUnit({ requestBody: data }),
     onSuccess: () => {
-      showToast("Success!", "ItemCategories created successfully.", "success")
+      showToast("Success!", "ItemUnits created successfully.", "success")
       reset()
       onClose()
     },
@@ -57,7 +57,7 @@ const AddItemCategory = ({ isOpen, onClose }: AddItemCategoryProps) => {
     },
   })
 
-  const onSubmit: SubmitHandler<ItemCategoryCreate> = (data) => {
+  const onSubmit: SubmitHandler<ItemUnitCreate> = (data) => {
     mutation.mutate(data)
   }
 
@@ -71,7 +71,7 @@ const AddItemCategory = ({ isOpen, onClose }: AddItemCategoryProps) => {
       >
         <ModalOverlay />
         <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Add ItemCategories</ModalHeader>
+          <ModalHeader>Add ItemUnits</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl isRequired isInvalid={!!errors.name}>
@@ -111,4 +111,4 @@ const AddItemCategory = ({ isOpen, onClose }: AddItemCategoryProps) => {
   )
 }
 
-export default AddItemCategory
+export default AddItemUnit
