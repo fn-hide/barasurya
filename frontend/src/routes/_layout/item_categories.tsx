@@ -18,7 +18,7 @@ import { z } from "zod"
 import { ItemCategoriesService } from "../../client"
 import ActionsMenu from "../../components/Common/ActionsMenu"
 import Navbar from "../../components/Common/Navbar"
-import AddItem from "../../components/Items/AddItem"
+import AddItemCategory from "../../components/Items/AddItemCategory.tsx"
 import { PaginationFooter } from "../../components/Common/PaginationFooter.tsx"
 
 const itemsSearchSchema = z.object({
@@ -72,7 +72,7 @@ function ItemsTable() {
           <Thead>
             <Tr>
               <Th>ID</Th>
-              <Th>Title</Th>
+              <Th>Name</Th>
               <Th>Description</Th>
               <Th>Actions</Th>
             </Tr>
@@ -103,7 +103,7 @@ function ItemsTable() {
                     {item.description || "N/A"}
                   </Td>
                   <Td>
-                    <ActionsMenu type={"Item"} value={item} />
+                    <ActionsMenu type={"ItemCategory"} value={item} />
                   </Td>
                 </Tr>
               ))}
@@ -128,7 +128,7 @@ function Items() {
         Item Categories Management
       </Heading>
 
-      <Navbar type={"Item"} addModalAs={AddItem} />
+      <Navbar type={"ItemCategory"} addModalAs={AddItemCategory} />
       <ItemsTable />
     </Container>
   )
