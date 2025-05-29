@@ -9,22 +9,116 @@ export type Body_login_login_access_token = {
   client_secret?: string | null
 }
 
+export type CustomerCreate = {
+  name: string
+  phone?: string | null
+  address?: string | null
+  customer_type_id: string
+}
+
+export type CustomerPublic = {
+  name: string
+  phone?: string | null
+  address?: string | null
+  id: string
+  owner_id: string
+  customer_type_id: string
+  date_created: string
+  date_updated: string
+}
+
+export type CustomersPublic = {
+  data: Array<CustomerPublic>
+  count: number
+}
+
+export type CustomerTypeCreate = {
+  name: string
+  description?: string | null
+}
+
+export type CustomerTypePublic = {
+  name: string
+  description?: string | null
+  id: string
+  owner_id: string
+  date_created: string
+  date_updated: string
+}
+
+export type CustomerTypesPublic = {
+  data: Array<CustomerTypePublic>
+  count: number
+}
+
+export type CustomerTypeUpdate = {
+  name?: string | null
+  description?: string | null
+}
+
+export type CustomerUpdate = {
+  name?: string | null
+  phone?: string | null
+  address?: string | null
+  customer_type_id?: string | null
+}
+
 export type HTTPValidationError = {
   detail?: Array<ValidationError>
 }
 
+export type ItemCategoriesPublic = {
+  data: Array<ItemCategoryPublic>
+  count: number
+}
+
+export type ItemCategoryCreate = {
+  name: string
+  description?: string | null
+}
+
+export type ItemCategoryPublic = {
+  name: string
+  description?: string | null
+  id: string
+  owner_id: string
+  date_created: string
+  date_updated: string
+}
+
+export type ItemCategoryUpdate = {
+  name?: string | null
+  description?: string | null
+}
+
 export type ItemCreate = {
   title: string
-  item_category_id?: string
-  item_unit_id?: string
   description?: string | null
+  price_purchase?: number | null
+  price_sell?: number | null
+  stock?: number
+  stock_minimum?: number
+  is_active?: boolean
+  location?: string | null
+  item_category_id: string
+  item_unit_id: string
 }
 
 export type ItemPublic = {
   title: string
   description?: string | null
+  price_purchase?: number | null
+  price_sell?: number | null
+  stock?: number
+  stock_minimum?: number
+  is_active?: boolean
+  location?: string | null
   id: string
   owner_id: string
+  item_category_id: string
+  item_unit_id: string
+  date_created: string
+  date_updated: string
 }
 
 export type ItemsPublic = {
@@ -32,9 +126,41 @@ export type ItemsPublic = {
   count: number
 }
 
+export type ItemUnitCreate = {
+  name: string
+  description?: string | null
+}
+
+export type ItemUnitPublic = {
+  name: string
+  description?: string | null
+  id: string
+  owner_id: string
+  date_created: string
+  date_updated: string
+}
+
+export type ItemUnitsPublic = {
+  data: Array<ItemUnitPublic>
+  count: number
+}
+
+export type ItemUnitUpdate = {
+  name?: string | null
+  description?: string | null
+}
+
 export type ItemUpdate = {
   title?: string | null
   description?: string | null
+  price_purchase?: number | null
+  price_sell?: number | null
+  stock?: number
+  stock_minimum?: number
+  is_active?: boolean
+  location?: string | null
+  item_category_id?: string | null
+  item_unit_id?: string | null
 }
 
 export type Message = {
@@ -44,6 +170,95 @@ export type Message = {
 export type NewPassword = {
   token: string
   new_password: string
+}
+
+export type PermissionCreate = {
+  name: string
+  description?: string | null
+}
+
+export type PermissionPublic = {
+  name: string
+  description?: string | null
+  id: string
+  date_created: string
+  date_updated: string
+  owner_id: string
+  editor_id: string
+}
+
+export type PermissionsPublic = {
+  data: Array<PermissionPublic>
+  count: number
+}
+
+export type PermissionUpdate = {
+  name: string | null
+  description?: string | null
+}
+
+export type PrivateUserCreate = {
+  email: string
+  password: string
+  full_name: string
+  is_verified?: boolean
+}
+
+export type StoreCreate = {
+  name: string
+  address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+}
+
+export type StorePublic = {
+  name: string
+  address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  id: string
+  owner_id: string
+  date_created: string
+  date_updated: string
+}
+
+export type StoresPublic = {
+  data: Array<StorePublic>
+  count: number
+}
+
+export type StoreUpdate = {
+  name?: string | null
+  address?: string | null
+  latitude?: number | null
+  longitude?: number | null
+}
+
+export type SupplierCreate = {
+  name: string
+  phone?: string | null
+  address?: string | null
+}
+
+export type SupplierPublic = {
+  name: string
+  phone?: string | null
+  address?: string | null
+  id: string
+  owner_id: string
+  date_created: string
+  date_updated: string
+}
+
+export type SuppliersPublic = {
+  data: Array<SupplierPublic>
+  count: number
+}
+
+export type SupplierUpdate = {
+  name?: string | null
+  phone?: string | null
+  address?: string | null
 }
 
 export type Token = {
@@ -70,6 +285,8 @@ export type UserPublic = {
   is_superuser?: boolean
   full_name?: string | null
   id: string
+  date_created: string
+  date_updated: string
 }
 
 export type UserRegister = {
@@ -101,6 +318,102 @@ export type ValidationError = {
   msg: string
   type: string
 }
+
+export type CustomersReadCustomersData = {
+  limit?: number
+  skip?: number
+}
+
+export type CustomersReadCustomersResponse = CustomersPublic
+
+export type CustomersCreateCustomerData = {
+  requestBody: CustomerCreate
+}
+
+export type CustomersCreateCustomerResponse = CustomerPublic
+
+export type CustomersReadCustomerData = {
+  id: string
+}
+
+export type CustomersReadCustomerResponse = CustomerPublic
+
+export type CustomersUpdateCustomerData = {
+  id: string
+  requestBody: CustomerUpdate
+}
+
+export type CustomersUpdateCustomerResponse = CustomerPublic
+
+export type CustomersDeleteCustomerData = {
+  id: string
+}
+
+export type CustomersDeleteCustomerResponse = Message
+
+export type CustomerTypesReadCustomerTypesData = {
+  limit?: number
+  skip?: number
+}
+
+export type CustomerTypesReadCustomerTypesResponse = CustomerTypesPublic
+
+export type CustomerTypesCreateCustomerTypeData = {
+  requestBody: CustomerTypeCreate
+}
+
+export type CustomerTypesCreateCustomerTypeResponse = CustomerTypePublic
+
+export type CustomerTypesReadCustomerTypeData = {
+  id: string
+}
+
+export type CustomerTypesReadCustomerTypeResponse = CustomerTypePublic
+
+export type CustomerTypesUpdateCustomerTypeData = {
+  id: string
+  requestBody: CustomerTypeUpdate
+}
+
+export type CustomerTypesUpdateCustomerTypeResponse = CustomerTypePublic
+
+export type CustomerTypesDeleteCustomerTypeData = {
+  id: string
+}
+
+export type CustomerTypesDeleteCustomerTypeResponse = Message
+
+export type ItemCategoriesReadItemCategoriesData = {
+  limit?: number
+  skip?: number
+}
+
+export type ItemCategoriesReadItemCategoriesResponse = ItemCategoriesPublic
+
+export type ItemCategoriesCreateItemCategoryData = {
+  requestBody: ItemCategoryCreate
+}
+
+export type ItemCategoriesCreateItemCategoryResponse = ItemCategoryPublic
+
+export type ItemCategoriesReadItemCategoryData = {
+  id: string
+}
+
+export type ItemCategoriesReadItemCategoryResponse = ItemCategoryPublic
+
+export type ItemCategoriesUpdateItemCategoryData = {
+  id: string
+  requestBody: ItemCategoryUpdate
+}
+
+export type ItemCategoriesUpdateItemCategoryResponse = ItemCategoryPublic
+
+export type ItemCategoriesDeleteItemCategoryData = {
+  id: string
+}
+
+export type ItemCategoriesDeleteItemCategoryResponse = Message
 
 export type ItemsReadItemsData = {
   limit?: number
@@ -134,6 +447,64 @@ export type ItemsDeleteItemData = {
 
 export type ItemsDeleteItemResponse = Message
 
+export type ItemsUpdateStockItemData = {
+  id: string
+  quantity: number
+}
+
+export type ItemsUpdateStockItemResponse = ItemPublic
+
+export type ItemsReadLowStockItemsData = {
+  limit?: number
+  skip?: number
+}
+
+export type ItemsReadLowStockItemsResponse = ItemsPublic
+
+export type ItemsActivateItemData = {
+  id: string
+}
+
+export type ItemsActivateItemResponse = ItemPublic
+
+export type ItemsDeactivateItemData = {
+  id: string
+}
+
+export type ItemsDeactivateItemResponse = ItemPublic
+
+export type ItemUnitsReadItemUnitsData = {
+  limit?: number
+  skip?: number
+}
+
+export type ItemUnitsReadItemUnitsResponse = ItemUnitsPublic
+
+export type ItemUnitsCreateItemUnitData = {
+  requestBody: ItemUnitCreate
+}
+
+export type ItemUnitsCreateItemUnitResponse = ItemUnitPublic
+
+export type ItemUnitsReadItemUnitData = {
+  id: string
+}
+
+export type ItemUnitsReadItemUnitResponse = ItemUnitPublic
+
+export type ItemUnitsUpdateItemUnitData = {
+  id: string
+  requestBody: ItemUnitUpdate
+}
+
+export type ItemUnitsUpdateItemUnitResponse = ItemUnitPublic
+
+export type ItemUnitsDeleteItemUnitData = {
+  id: string
+}
+
+export type ItemUnitsDeleteItemUnitResponse = Message
+
 export type LoginLoginAccessTokenData = {
   formData: Body_login_login_access_token
 }
@@ -160,6 +531,108 @@ export type LoginRecoverPasswordHtmlContentData = {
 
 export type LoginRecoverPasswordHtmlContentResponse = string
 
+export type PermissionsReadPermissionData = {
+  id: string
+}
+
+export type PermissionsReadPermissionResponse = PermissionPublic
+
+export type PermissionsUpdatePermissionData = {
+  id: string
+  requestBody: PermissionUpdate
+}
+
+export type PermissionsUpdatePermissionResponse = PermissionPublic
+
+export type PermissionsDeletePermissionData = {
+  id: string
+}
+
+export type PermissionsDeletePermissionResponse = Message
+
+export type PermissionsReadPermissionsData = {
+  limit?: number
+  skip?: number
+}
+
+export type PermissionsReadPermissionsResponse = PermissionsPublic
+
+export type PermissionsCreatePermissionData = {
+  requestBody: PermissionCreate
+}
+
+export type PermissionsCreatePermissionResponse = PermissionPublic
+
+export type PrivateCreateUserData = {
+  requestBody: PrivateUserCreate
+}
+
+export type PrivateCreateUserResponse = UserPublic
+
+export type StoresReadStoresData = {
+  limit?: number
+  skip?: number
+}
+
+export type StoresReadStoresResponse = StoresPublic
+
+export type StoresCreateStoreData = {
+  requestBody: StoreCreate
+}
+
+export type StoresCreateStoreResponse = StorePublic
+
+export type StoresReadStoreData = {
+  id: string
+}
+
+export type StoresReadStoreResponse = StorePublic
+
+export type StoresUpdateStoreData = {
+  id: string
+  requestBody: StoreUpdate
+}
+
+export type StoresUpdateStoreResponse = StorePublic
+
+export type StoresDeleteStoreData = {
+  id: string
+}
+
+export type StoresDeleteStoreResponse = Message
+
+export type SuppliersReadSuppliersData = {
+  limit?: number
+  skip?: number
+}
+
+export type SuppliersReadSuppliersResponse = SuppliersPublic
+
+export type SuppliersCreateSupplierData = {
+  requestBody: SupplierCreate
+}
+
+export type SuppliersCreateSupplierResponse = SupplierPublic
+
+export type SuppliersReadSupplierData = {
+  id: string
+}
+
+export type SuppliersReadSupplierResponse = SupplierPublic
+
+export type SuppliersUpdateSupplierData = {
+  id: string
+  requestBody: SupplierUpdate
+}
+
+export type SuppliersUpdateSupplierResponse = SupplierPublic
+
+export type SuppliersDeleteSupplierData = {
+  id: string
+}
+
+export type SuppliersDeleteSupplierResponse = Message
+
 export type UsersReadUsersData = {
   limit?: number
   skip?: number
@@ -172,6 +645,13 @@ export type UsersCreateUserData = {
 }
 
 export type UsersCreateUserResponse = UserPublic
+
+export type UsersReadSpecialData = {
+  limit?: number
+  skip?: number
+}
+
+export type UsersReadSpecialResponse = UsersPublic
 
 export type UsersReadUserMeResponse = UserPublic
 
